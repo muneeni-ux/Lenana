@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Droplets, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../components/common/ThemeContext";
 
 function Home() {
   const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext);
+
+  // Ensure HTML class reflects current theme
+  useEffect(() => {
+    const html = document.documentElement;
+    if (theme === "dark") html.classList.add("dark");
+    else html.classList.remove("dark");
+  }, [theme]);
 
   const products = [
     {
@@ -11,69 +20,85 @@ function Home() {
       size: "500ml",
       price: "KSh 25",
       image:
-        "https://images.unsplash.com/photo-1612198796135-896f23b7d5fd?auto=format&fit=crop&w=500&q=60",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCf01QbQ1tEaDHuBdCK-ZH589GY8CeCgvKaQ&s",
     },
     {
       name: "Premium Bottled Water",
       size: "1 Litre",
       price: "KSh 40",
       image:
-        "https://images.unsplash.com/photo-1598509839151-2e74c4b31c56?auto=format&fit=crop&w=500&q=60",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCf01QbQ1tEaDHuBdCK-ZH589GY8CeCgvKaQ&s",
     },
     {
       name: "Premium Bottled Water",
       size: "20L Refill",
       price: "KSh 100",
       image:
-        "https://images.unsplash.com/photo-1589365278144-c9c4897b2f09?auto=format&fit=crop&w=500&q=60",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCf01QbQ1tEaDHuBdCK-ZH589GY8CeCgvKaQ&s",
     },
   ];
 
   return (
-    <div className="pt-20">
-      {/* HERO SECTION */}
-      <section className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-800 transition-all">
-        <h1 className="text-4xl md:text-6xl font-extrabold text-gray-800 dark:text-white leading-tight">
-          Pure. Refreshing.  
-          <span className="text-green-600 dark:text-green-400"> Lenana Drops</span>
-        </h1>
+    <div className="pt-16 transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
+      {/* ======================= HERO SECTION ======================= */}
+      <section className="relative min-h-[90vh] flex items-center justify-center text-center px-6 overflow-hidden">
+        <img
+          src="https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg"
+          alt="water"
+          className="absolute inset-0 w-full h-full object-cover brightness-[0.55] dark:brightness-[0.35] transition-all duration-300"
+        />
 
-        <p className="max-w-2xl mt-4 text-lg text-gray-600 dark:text-gray-300">
-          Delivering high-quality drinking water across Nanyuki. Affordable, pure,
-          and produced under strict quality standards.
-        </p>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent dark:from-black/70 dark:via-black/40 transition-all duration-300"></div>
 
-        <button
-          onClick={() => navigate("/login")}
-          className="mt-8 px-8 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition flex items-center gap-2"
-        >
-          Login to Portal <ArrowRight size={18} />
-        </button>
+        <div className="relative z-10 max-w-3xl text-white">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight drop-shadow-xl">
+            Pure. Refreshing.
+            <span className="block text-green-400">Lenana Drops</span>
+          </h1>
+
+          <p className="max-w-2xl mx-auto mt-4 text-lg md:text-xl text-gray-200">
+            Delivering high-quality drinking water across Nanyuki.
+            Affordable, pure, and produced under strict quality standards.
+          </p>
+
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-8 px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition flex items-center gap-2 mx-auto"
+          >
+            Login to Portal <ArrowRight size={20} />
+          </button>
+        </div>
       </section>
 
-      {/* PRODUCT SECTION */}
-      <section className="py-16 px-6 bg-white dark:bg-gray-900 transition-all">
-        <h2 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-10">
+      {/* ======================= PRODUCTS SECTION ======================= */}
+      <section className="py-20 px-6 transition-colors duration-300">
+        <h2 className="text-4xl font-bold text-center text-gray-800 dark:text-white mb-14">
           Our Products
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-10 max-w-7xl mx-auto">
           {products.map((p, index) => (
             <div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition overflow-hidden"
+              className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition transform hover:-translate-y-1"
             >
-              <img src={p.image} alt="" className="h-48 w-full object-cover" />
+              <img
+                src={p.image}
+                alt={p.name}
+                className="h-56 w-full object-cover rounded-t-2xl"
+              />
 
-              <div className="p-5">
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white">
                   {p.name}
                 </h3>
-                <p className="text-gray-500 dark:text-gray-300">{p.size}</p>
+                <p className="text-gray-600 dark:text-gray-300">{p.size}</p>
 
                 <div className="mt-4 flex justify-between items-center">
-                  <span className="text-green-600 font-bold">{p.price}</span>
-                  <Droplets className="text-green-600" />
+                  <span className="text-green-600 dark:text-green-400 font-bold text-lg">
+                    {p.price}
+                  </span>
+                  <Droplets className="text-green-600 dark:text-green-400" />
                 </div>
               </div>
             </div>
@@ -81,16 +106,19 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA BANNER */}
-      <section className="py-16 bg-green-600 text-white text-center">
-        <h2 className="text-3xl font-bold">Become a distributor today</h2>
-        <p className="mt-2 text-white/90">
-          Contact us and start selling Lenana Drops products.
+      {/* ======================= CTA BANNER ======================= */}
+      <section className="py-20 bg-gradient-to-br from-green-600 to-green-700 text-white text-center relative overflow-hidden transition-colors duration-300">
+        <Droplets className="absolute top-5 left-10 opacity-20" size={80} />
+        <Droplets className="absolute bottom-10 right-10 opacity-20" size={60} />
+
+        <h2 className="text-4xl font-extrabold">Become a Distributor Today</h2>
+        <p className="mt-3 text-white/90 max-w-xl mx-auto">
+          Contact us and start selling Lenana Drops products with ease.
         </p>
 
         <button
           onClick={() => navigate("/login")}
-          className="mt-5 px-8 py-3 bg-white text-green-700 font-semibold rounded-lg shadow hover:bg-gray-100 transition"
+          className="mt-6 px-10 py-3 bg-white text-green-700 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition"
         >
           Login to Get Started
         </button>

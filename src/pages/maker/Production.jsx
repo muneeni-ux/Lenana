@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { PlusCircle, Clock, CheckCircle, Timer, Package } from "lucide-react";
-{
-  /* Product batches requested seen here (Begun Production button to start and set start time and end time when done)
-      Track Progress: Update start/end times on the batches,
-      Products inputted here after production(automatic if possible) status: Completed, defective, wasted (frontend to include product dropdown with prices) 
-      Inventory view to see added products and their details and status
-      */
-}
+import { PlusCircle, Clock, CheckCircle, Package } from "lucide-react";
+import BatchForm from "../../components/forms/BatchForm";
+// {
+//   /* Product batches requested seen here (Begun Production button to start and set start time and end time when done)
+//       Track Progress: Update start/end times on the batches,
+//       Products inputted here after production(automatic if possible) status: Completed, defective, wasted (frontend to include product dropdown with prices) 
+//       Inventory view to see added products and their details and status
+//       */
+// }
 function Production() {
-  const [formOpen, setFormOpen] = useState(false);
-
   const [batches, setBatches] = useState([
     {
       id: "BATCH-001",
@@ -37,10 +36,7 @@ function Production() {
     },
   ]);
 
-  const [newBatch, setNewBatch] = useState({
-    product: "",
-    qty: "",
-  });
+  const [modalOpen, setModalOpen] = useState(false);
 
   const productOptions = [
     { name: "20L Bottle", price: 250 },
@@ -48,32 +44,11 @@ function Production() {
     { name: "Small Bottles Pack", price: 120 },
   ];
 
-  const addBatch = (e) => {
-    e.preventDefault();
-    setBatches([
-      {
-        id: "BATCH-" + Math.floor(Math.random() * 900 + 100),
-        product: newBatch.product,
-        qty: newBatch.qty,
-        status: "Pending",
-        start: null,
-        end: null,
-      },
-      ...batches,
-    ]);
-    setFormOpen(false);
-    setNewBatch({ product: "", qty: "" });
-  };
-
   const startBatch = (id) => {
     setBatches((prev) =>
       prev.map((b) =>
         b.id === id
-          ? {
-              ...b,
-              status: "In Progress",
-              start: new Date().toLocaleString(),
-            }
+          ? { ...b, status: "In Progress", start: new Date().toLocaleString() }
           : b
       )
     );
@@ -83,14 +58,23 @@ function Production() {
     setBatches((prev) =>
       prev.map((b) =>
         b.id === id
-          ? {
-              ...b,
-              status: "Completed",
-              end: new Date().toLocaleString(),
-            }
+          ? { ...b, status: "Completed", end: new Date().toLocaleString() }
           : b
       )
     );
+  };
+
+  const addBatch = (batch) => {
+    setBatches([
+      {
+        id: "BATCH-" + Math.floor(Math.random() * 900 + 100),
+        ...batch,
+        status: "Pending",
+        start: null,
+        end: null,
+      },
+      ...batches,
+    ]);
   };
 
   const getStatusBadge = (status) => {
@@ -111,13 +95,11 @@ function Production() {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Production</h1>
-
         <button
-          onClick={() => setFormOpen(true)}
+          onClick={() => setModalOpen(true)}
           className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
         >
-          <PlusCircle size={20} />
-          Add Batch
+          <PlusCircle size={20} /> Add Batch
         </button>
       </div>
 
@@ -143,15 +125,14 @@ function Production() {
                 <Clock size={14} /> Started: {batch.start}
               </p>
             )}
-
             {batch.end && (
               <p className="text-sm mb-1 flex items-center gap-2">
                 <CheckCircle size={14} /> Completed: {batch.end}
               </p>
             )}
 
-            {/* ACTION BUTTONS */}
-            <div className="mt-4">
+            {/* Action Buttons */}
+            <div className="mt-4 flex gap-2 flex-wrap">
               {batch.status === "Pending" && (
                 <button
                   onClick={() => startBatch(batch.id)}
@@ -160,7 +141,6 @@ function Production() {
                   Begin Production
                 </button>
               )}
-
               {batch.status === "In Progress" && (
                 <button
                   onClick={() => completeBatch(batch.id)}
@@ -169,7 +149,6 @@ function Production() {
                   Mark Completed
                 </button>
               )}
-
               {batch.status === "Completed" && (
                 <p className="text-green-700 font-semibold mt-2">
                   Production Completed
@@ -180,62 +159,13 @@ function Production() {
         ))}
       </div>
 
-      {/* ADD BATCH FORM (Slide-in) */}
-      {formOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-end">
-          <div className="w-full md:w-1/3 bg-white dark:bg-gray-800 h-full p-6 animate-slide-left shadow-xl">
-            <h2 className="text-2xl font-bold mb-5">Add Production Batch</h2>
-
-            <form onSubmit={addBatch} className="space-y-5">
-              <div>
-                <label className="text-sm font-semibold">Product</label>
-                <select
-                  required
-                  value={newBatch.product}
-                  onChange={(e) =>
-                    setNewBatch({ ...newBatch, product: e.target.value })
-                  }
-                  className="w-full mt-1 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700"
-                >
-                  <option value="">Select product</option>
-                  {productOptions.map((p, idx) => (
-                    <option key={idx} value={p.name}>
-                      {p.name} — KES {p.price}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-sm font-semibold">Quantity</label>
-                <input
-                  type="number"
-                  required
-                  value={newBatch.qty}
-                  onChange={(e) =>
-                    setNewBatch({ ...newBatch, qty: e.target.value })
-                  }
-                  className="w-full mt-1 px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg"
-              >
-                Save Batch
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setFormOpen(false)}
-                className="w-full bg-gray-300 dark:bg-gray-600 py-3 rounded-lg mt-2"
-              >
-                Cancel
-              </button>
-            </form>
-          </div>
-        </div>
+      {/* Batch Modal */}
+      {modalOpen && (
+        <BatchForm
+          closeModal={() => setModalOpen(false)}
+          addBatch={addBatch}
+          productOptions={productOptions}
+        />
       )}
     </div>
   );

@@ -124,7 +124,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
 import ScrollToTop from "./components/common/scrollTop";
 import Navbar from "./components/common/Navbar";
 import Footer from "./components/common/Footer";
@@ -171,13 +170,13 @@ const App = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-all">
       <ScrollToTop />
 
-      <Toaster
+      {/* <Toaster
         position="top-right"
         toastOptions={{
           success: { style: { background: "#D1FAE5", color: "#065F46" } },
           error: { style: { background: "#FEE2E2", color: "#991B1B" } },
         }}
-      />
+      /> */}
 
       {/* Navbar visible for public + logged pages */}
       {!shouldHideNav && <Navbar role={role} loggedIn={loggedIn} />}
@@ -223,7 +222,7 @@ const App = () => {
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-
+      
       <Footer />
     </div>
   );
