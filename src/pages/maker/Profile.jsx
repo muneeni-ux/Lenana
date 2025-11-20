@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { User, Mail, Phone, Lock, Camera } from "lucide-react";
+import { User, Lock, Camera } from "lucide-react";
 
 function Profile() {
   const storedUser = JSON.parse(localStorage.getItem("user")) || {

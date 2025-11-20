@@ -172,7 +172,11 @@ function Orders() {
       </div>
 
       {/* Modal */}
-      <OrderForm open={formOpen} onClose={() => setFormOpen(false)} onSubmit={addOrder} />
+      <OrderForm
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        onSubmit={addOrder}
+      />
     </div>
   );
 }

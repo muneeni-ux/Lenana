@@ -153,6 +153,7 @@ import StockMovement from "./pages/checker/StockMovement";
 import AdminDashboard from "./Admin/AdminDashboard";
 import UsersDetails from "./Admin/UserDetails";
 import ManageSales from "./Admin/ManageSales";
+import Inventory from "./pages/maker/Inventory";
 
 const App = () => {
   const location = useLocation();
@@ -170,17 +171,17 @@ const App = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-all">
       <ScrollToTop />
 
-      {/* <Toaster
+      <Toaster
         position="top-right"
         toastOptions={{
           success: { style: { background: "#D1FAE5", color: "#065F46" } },
           error: { style: { background: "#FEE2E2", color: "#991B1B" } },
         }}
-      /> */}
+      />
 
       {/* Navbar visible for public + logged pages */}
       {!shouldHideNav && <Navbar role={role} loggedIn={loggedIn} />}
-
+     <main className="min-h-screen bg-cream">
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
@@ -194,6 +195,7 @@ const App = () => {
             <Route path="/orders" element={<Orders />} />
             <Route path="/production" element={<Production />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/inventory" element={<Inventory />} />
           </>
         )}
 
@@ -206,7 +208,8 @@ const App = () => {
             <Route path="/checker/production" element={<ManageProduction />} />
             <Route path="/checker/invoices" element={<ManageInvoices />} />
             <Route path="/checker/delivery" element={<ManageDelivery />} />
-            <Route path="/checker/stock" element={<StockMovement />} />
+            {/* <Route path="/checker/stock" element={<StockMovement />} /> */}
+            <Route path="/inventory" element={<Inventory />} />
           </>
         )}
 
@@ -222,7 +225,7 @@ const App = () => {
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      
+     </main>
       <Footer />
     </div>
   );

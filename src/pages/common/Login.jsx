@@ -17,16 +17,16 @@ function Login() {
       return;
     }
 
-    // 🔐 For now simulate Maker login
+    // 🔐 For now simulate Checker login
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem(
       "user",
-      JSON.stringify({ username: "Maker", role: "maker" })
+      JSON.stringify({ username: "Checker", role: "checker" })
     );
 
     toast.success("Logged in successfully");
 
-    navigate("/dashboard");
+    navigate("/checker/dashboard");
   };
 
   return (

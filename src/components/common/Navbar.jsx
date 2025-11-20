@@ -57,6 +57,7 @@ const Navbar = ({ role, loggedIn }) => {
     { path: "/orders", label: "Orders", icon: <ShoppingBag size={16} /> },
     { path: "/production", label: "Production", icon: <Package size={16} /> },
     { path: "/clients", label: "Clients", icon: <Users size={16} /> },
+    { path: "/inventory", label: "Inventory", icon: <FileText size={16} /> },
   ];
 
   const checkerNav = [
@@ -66,7 +67,7 @@ const Navbar = ({ role, loggedIn }) => {
     { path: "/checker/production", label: "Production", icon: <Package size={16} /> },
     { path: "/checker/invoices", label: "Invoices", icon: <FileText size={16} /> },
     { path: "/checker/delivery", label: "Delivery", icon: <Truck size={16} /> },
-    { path: "/checker/stock", label: "Stock", icon: <Layers size={16} /> },
+    { path: "/inventory", label: "Inventory", icon: <Layers size={16} /> },
   ];
 
   const adminNav = [
@@ -91,7 +92,7 @@ const Navbar = ({ role, loggedIn }) => {
   /* ======================================================================= */
   return (
     <header className="fixed top-0 left-0 w-full z-50 shadow-md bg-white/90 dark:bg-gray-900/90 backdrop-blur border-b border-gray-300 dark:border-gray-700 transition-all">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-2 md:px-0 py-3">
 
         {/* LOGO */}
         <div onClick={() => navigate("/")} className="flex items-center gap-3 cursor-pointer">
