@@ -14,7 +14,7 @@ function Production() {
       id: "BATCH-001",
       product: "20L Bottle",
       qty: 50,
-      status: "Pending",
+      status: "Planned",
       start: null,
       end: null,
     },
@@ -69,7 +69,7 @@ function Production() {
       {
         id: "BATCH-" + Math.floor(Math.random() * 900 + 100),
         ...batch,
-        status: "Pending",
+        status: "Plannedy",
         start: null,
         end: null,
       },
@@ -79,7 +79,7 @@ function Production() {
 
   const getStatusBadge = (status) => {
     const map = {
-      Pending: "bg-yellow-200 text-yellow-800",
+      Plannedy: "bg-yellow-200 text-yellow-800",
       "In Progress": "bg-blue-200 text-blue-800",
       Completed: "bg-green-200 text-green-800",
     };
@@ -133,7 +133,7 @@ function Production() {
 
             {/* Action Buttons */}
             <div className="mt-4 flex gap-2 flex-wrap">
-              {batch.status === "Pending" && (
+              {batch.status === "Plannedy" && (
                 <button
                   onClick={() => startBatch(batch.id)}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"

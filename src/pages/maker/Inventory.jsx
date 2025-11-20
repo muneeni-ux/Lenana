@@ -583,6 +583,7 @@ export default function Inventory() {
               <th className="p-3">Damaged</th>
               <th className="p-3">Total On Hand</th>
               <th className="p-3">Days Supply</th>
+              <th className="p-3">Warehouse</th>
               <th className="p-3">Last Count</th>
               <th className="p-3">Actions</th>
             </tr>
@@ -600,6 +601,7 @@ export default function Inventory() {
                   <td className="p-3 text-red-500">{item.quantityDamaged}</td>
                   <td className="p-3 font-bold">{total}</td>
                   <td className="p-3">{item.daysSupplyOnHand}</td>
+                  <td className="p-3">{item.warehouseLocation}</td>
                   <td className="p-3">{item.lastStockCountDate}</td>
                   <td className="p-3 flex gap-2">
                     <button onClick={() => moveStock({ inventoryId: item.id, delta: -1, reason: "Manual dispatch", by: "maker" })} className="px-3 py-1 rounded bg-green-600 text-white">-1</button>

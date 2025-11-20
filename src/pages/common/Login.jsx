@@ -21,12 +21,12 @@ function Login() {
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem(
       "user",
-      JSON.stringify({ username: "Checker", role: "checker" })
+      JSON.stringify({ username: "Maker", role: "maker" })
     );
 
     toast.success("Logged in successfully");
 
-    navigate("/checker/dashboard");
+    navigate("/dashboard");
   };
 
   return (
