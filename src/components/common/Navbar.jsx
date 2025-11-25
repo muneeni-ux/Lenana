@@ -42,7 +42,9 @@ const Navbar = ({ role, loggedIn }) => {
     return () => document.removeEventListener("mousedown", closeDropdown);
   }, []);
 
-  const user = JSON.parse(localStorage.getItem("user")) || { username: "Guest" };
+  const user = JSON.parse(localStorage.getItem("user")) || {
+    username: "Guest",
+  };
 
   /* --------------------------- NAV ITEMS ---------------------------- */
   const guestNav = [
@@ -61,17 +63,37 @@ const Navbar = ({ role, loggedIn }) => {
   ];
 
   const checkerNav = [
-    { path: "/checker/dashboard", label: "Dashboard", icon: <BarChart size={16} /> },
+    {
+      path: "/checker/dashboard",
+      label: "Dashboard",
+      icon: <BarChart size={16} />,
+    },
     { path: "/checker/clients", label: "Clients", icon: <Users size={16} /> },
-    { path: "/checker/orders", label: "Orders", icon: <ClipboardList size={16} /> },
-    { path: "/checker/production", label: "Production", icon: <Package size={16} /> },
-    { path: "/checker/invoices", label: "Invoices", icon: <FileText size={16} /> },
+    {
+      path: "/checker/orders",
+      label: "Orders",
+      icon: <ClipboardList size={16} />,
+    },
+    {
+      path: "/checker/production",
+      label: "Production",
+      icon: <Package size={16} />,
+    },
+    {
+      path: "/checker/invoices",
+      label: "Invoices",
+      icon: <FileText size={16} />,
+    },
     { path: "/checker/delivery", label: "Delivery", icon: <Truck size={16} /> },
     { path: "/inventory", label: "Inventory", icon: <Layers size={16} /> },
   ];
 
   const adminNav = [
-    { path: "/admin/dashboard", label: "Dashboard", icon: <BarChart size={16} /> },
+    {
+      path: "/admin/dashboard",
+      label: "Dashboard",
+      icon: <BarChart size={16} />,
+    },
     { path: "/admin/users", label: "Users", icon: <Users size={16} /> },
     { path: "/admin/sales", label: "Sales", icon: <ShoppingBag size={16} /> },
   ];
@@ -93,14 +115,21 @@ const Navbar = ({ role, loggedIn }) => {
   return (
     <header className="fixed top-0 left-0 w-full z-50 shadow-md bg-white/90 dark:bg-gray-900/90 backdrop-blur border-b border-gray-300 dark:border-gray-700 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-2 md:px-0 py-3">
-
         {/* LOGO */}
-        <div onClick={() => navigate("/")} className="flex items-center gap-3 cursor-pointer">
-          <div className="bg-green-600 dark:bg-green-500 p-2 rounded-full shadow">
-            <Droplet size={22} className="text-white" />
-          </div>
+        <div
+          onClick={() => navigate("/")}
+          className="flex items-center gap-3 cursor-pointer"
+        >
+          {/* <Droplet size={22} className="text-white" /> */}
+          <img
+            src="./LenanaLogo3.jpg"
+            alt=""
+            className="h-12 w-12 rounded-full"
+          />
           <div>
-            <h1 className="text-xl font-bold text-green-700 dark:text-green-300">Lenana Drops</h1>
+            <h1 className="text-xl font-bold text-amber-700 dark:text-amber-300">
+              Lenana Drops
+            </h1>
             <p className="text-xs text-gray-500 dark:text-gray-400">Nanyuki</p>
           </div>
         </div>
@@ -114,8 +143,8 @@ const Navbar = ({ role, loggedIn }) => {
               className={({ isActive }) =>
                 `flex items-center gap-2 text-sm px-4 py-2 rounded-lg font-medium transition-all ${
                   isActive
-                    ? "bg-green-600 text-white shadow-md"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-gray-700"
+                    ? "bg-amber-600 text-white shadow-md"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-amber-100 dark:hover:bg-gray-700"
                 }`
               }
             >
@@ -139,7 +168,7 @@ const Navbar = ({ role, loggedIn }) => {
           {!loggedIn && (
             <button
               onClick={() => navigate("/login")}
-              className="hidden md:block px-5 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
+              className="hidden md:block px-5 py-2 rounded-lg bg-amber-600 text-white hover:bg-amber-700"
             >
               Login
             </button>
@@ -150,9 +179,9 @@ const Navbar = ({ role, loggedIn }) => {
             <div ref={dropdownRef} className="relative hidden md:block">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-gray-700 rounded-lg"
+                className="flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-gray-700 rounded-lg"
               >
-                <User className="text-green-600 dark:text-green-300" />
+                <User className="text-amber-600 dark:text-amber-300" />
                 <span className="text-sm">{user.username}</span>
               </button>
 
@@ -160,7 +189,7 @@ const Navbar = ({ role, loggedIn }) => {
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden border dark:border-gray-700">
                   <button
                     onClick={() => navigate("/profile")}
-                    className="px-4 py-3 text-sm flex gap-2 hover:bg-green-100 dark:hover:bg-gray-700 w-full text-left"
+                    className="px-4 py-3 text-sm flex gap-2 hover:bg-amber-100 dark:hover:bg-gray-700 w-full text-left"
                   >
                     <Settings size={16} />
                     Profile
@@ -212,8 +241,8 @@ const Navbar = ({ role, loggedIn }) => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 ${
                   isActive
-                    ? "bg-green-100 text-green-800 border-l-4 border-green-600"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-green-700"
+                    ? "bg-amber-100 text-amber-800 border-l-4 border-amber-600"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-amber-700"
                 }`
               }
             >
@@ -225,7 +254,7 @@ const Navbar = ({ role, loggedIn }) => {
           {!loggedIn ? (
             <button
               onClick={() => navigate("/login")}
-              className="w-full p-3 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              className="w-full p-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700"
             >
               Login
             </button>

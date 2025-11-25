@@ -89,7 +89,7 @@ function MakerDashboard() {
       <div className="mb-10">
         <h1 className="text-4xl font-extrabold">
           Welcome back,{" "}
-          <span className="text-green-600 dark:text-green-400">
+          <span className="text-yellow-600 dark:text-yellow-400">
             {user.username}
           </span>
         </h1>

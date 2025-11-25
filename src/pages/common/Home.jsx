@@ -53,7 +53,7 @@ function Home() {
         <div className="relative z-10 max-w-3xl text-white">
           <h1 className="text-5xl md:text-7xl font-extrabold leading-tight drop-shadow-xl">
             Pure. Refreshing.
-            <span className="block text-green-400">Lenana Drops</span>
+            <span className="block text-yellow-400">Lenana Drops</span>
           </h1>
 
           <p className="max-w-2xl mx-auto mt-4 text-lg md:text-xl text-gray-200">
@@ -63,7 +63,7 @@ function Home() {
 
           <button
             onClick={() => navigate("/login")}
-            className="mt-8 px-10 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition flex items-center gap-2 mx-auto"
+            className="mt-8 px-10 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg shadow-lg transition flex items-center gap-2 mx-auto"
           >
             Login to Portal <ArrowRight size={20} />
           </button>
@@ -95,10 +95,10 @@ function Home() {
                 <p className="text-gray-600 dark:text-gray-300">{p.size}</p>
 
                 <div className="mt-4 flex justify-between items-center">
-                  <span className="text-green-600 dark:text-green-400 font-bold text-lg">
+                  <span className="text-yellow-600 dark:text-yellow-400 font-bold text-lg">
                     {p.price}
                   </span>
-                  <Droplets className="text-green-600 dark:text-green-400" />
+                  <Droplets className="text-yellow-600 dark:text-yellow-400" />
                 </div>
               </div>
             </div>
@@ -107,7 +107,7 @@ function Home() {
       </section>
 
       {/* ======================= CTA BANNER ======================= */}
-      <section className="py-20 bg-gradient-to-br from-green-600 to-green-700 text-white text-center relative overflow-hidden transition-colors duration-300">
+      <section className="py-20 bg-gradient-to-br from-yellow-600 to-yellow-700 text-white text-center relative overflow-hidden transition-colors duration-300">
         <Droplets className="absolute top-5 left-10 opacity-20" size={80} />
         <Droplets className="absolute bottom-10 right-10 opacity-20" size={60} />
 
@@ -118,7 +118,7 @@ function Home() {
 
         <button
           onClick={() => navigate("/login")}
-          className="mt-6 px-10 py-3 bg-white text-green-700 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition"
+          className="mt-6 px-10 py-3 bg-white text-yellow-700 font-semibold rounded-lg shadow-lg hover:bg-gray-100 transition"
         >
           Login to Get Started
         </button>

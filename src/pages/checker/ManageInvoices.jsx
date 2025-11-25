@@ -160,7 +160,7 @@ function ManageInvoices() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-5 py-2 rounded-lg font-semibold transition ${tab === t ? "bg-green-600 text-white" : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"}`}
+            className={`px-5 py-2 rounded-lg font-semibold transition ${tab === t ? "bg-amber-600 text-white" : "bg-gray-200 dark:bg-gray-700 dark:text-gray-200"}`}
           >
             {t === "CURRENT" ? "Current Invoices" : "Past Invoices"}
           </button>

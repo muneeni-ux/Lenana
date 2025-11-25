@@ -97,7 +97,7 @@ function Production() {
         <h1 className="text-3xl font-bold">Production</h1>
         <button
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
+          className="flex items-center gap-2 bg-yellow-600 text-white px-5 py-2 rounded-lg hover:bg-yellow-700 transition"
         >
           <PlusCircle size={20} /> Add Batch
         </button>

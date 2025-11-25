@@ -464,7 +464,7 @@ export default function Inventory() {
 
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-yellow-600 text-white hover:bg-yellow-700 transition"
             title="Download inventory CSV"
           >
             <Download size={16} /> Export

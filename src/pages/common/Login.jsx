@@ -21,7 +21,7 @@ function Login() {
     localStorage.setItem("loggedIn", "true");
     localStorage.setItem(
       "user",
-      JSON.stringify({ username: "Maker", role: "maker" })
+      JSON.stringify({ username: "Checker", role: "checker" })
     );
 
     toast.success("Logged in successfully");
@@ -45,10 +45,10 @@ function Login() {
       <div className="relative w-full max-w-md bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl shadow-2xl rounded-2xl p-8 border border-white/40 dark:border-gray-700">
         {/* LOGO */}
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-green-600 dark:bg-green-500 p-3 rounded-full shadow-lg">
+          <div className="bg-yellow-600 dark:bg-yellow-500 p-3 rounded-full shadow-lg">
             <Droplet className="text-white" size={28} />
           </div>
-          <h1 className="text-2xl font-extrabold text-green-700 dark:text-green-300 mt-3">
+          <h1 className="text-2xl font-extrabold text-yellow-700 dark:text-yellow-300 mt-3">
             Lenana Drops Portal
           </h1>
         </div>
@@ -70,7 +70,7 @@ function Login() {
             <input
               type="email"
               placeholder="Email address"
-              className="w-full pl-10 pr-4 py-3 rounded-lg bg-white/60 dark:bg-gray-700/60 text-gray-800 dark:text-white backdrop-blur focus:ring-2 focus:ring-green-500 outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-lg bg-white/60 dark:bg-gray-700/60 text-gray-800 dark:text-white backdrop-blur focus:ring-2 focus:ring-yellow-500 outline-none"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -82,7 +82,7 @@ function Login() {
             <input
               type={showPass ? "text" : "password"}
               placeholder="Password"
-              className="w-full pl-10 pr-10 py-3 rounded-lg bg-white/60 dark:bg-gray-700/60 text-gray-800 dark:text-white backdrop-blur focus:ring-2 focus:ring-green-500 outline-none"
+              className="w-full pl-10 pr-10 py-3 rounded-lg bg-white/60 dark:bg-gray-700/60 text-gray-800 dark:text-white backdrop-blur focus:ring-2 focus:ring-yellow-500 outline-none"
               onChange={(e) => setPassword(e.target.value)}
             />
 
@@ -95,20 +95,20 @@ function Login() {
           </div>
 
           {/* Login Button */}
-          <button className="w-full py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition flex items-center justify-center gap-2 shadow-lg">
+          <button className="w-full py-3 bg-yellow-600 text-white font-semibold rounded-lg hover:bg-yellow-700 transition flex items-center justify-center gap-2 shadow-lg">
             <LogIn size={18} />
             Login
           </button>
         </form>
 
         {/* FOOTER */}
-        <p className="text-sm text-center text-gray-300 mt-6">
+        <p className="text-sm text-center text-gray-500 mt-6">
           Need help? Contact the administrator.
         </p>
         <center>
           <button
             onClick={() => navigate("/")}
-            className="text-sm mt-4 flex items-center justify-center text-blue-200 hover:underline"
+            className="text-sm mt-4 flex items-center justify-center dark:text-blue-200 hover:underline text-blue-800"
           >
             Back to Home
           </button>

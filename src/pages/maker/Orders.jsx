@@ -348,7 +348,7 @@ export default function Orders() {
 
         <div className="flex items-center gap-3">
           <a href={SPEC_PDF_URL} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-lg border hover:bg-gray-50 dark:hover:bg-gray-800">Spec</a>
-          <button onClick={() => setFormOpen(true)} className="flex items-center gap-2 bg-green-600 text-white py-2 px-5 rounded-lg hover:bg-green-700 transition shadow">
+          <button onClick={() => setFormOpen(true)} className="flex items-center gap-2 bg-yellow-600 text-white py-2 px-5 rounded-lg hover:bg-yellow-700 transition shadow">
             <PlusCircle size={20} /> Create Order
           </button>
         </div>

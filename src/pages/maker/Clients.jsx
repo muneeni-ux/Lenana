@@ -25,7 +25,7 @@ function Clients() {
         <h1 className="text-3xl font-bold">Clients</h1>
         <button
           onClick={() => setFormOpen(true)}
-          className="flex items-center gap-2 bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition"
+          className="flex items-center gap-2 bg-yellow-600 text-white px-5 py-2 rounded-lg hover:bg-yellow-700 transition"
         >
           <UserPlus size={20} />
           Add Client
