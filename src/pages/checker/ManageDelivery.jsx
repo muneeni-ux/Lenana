@@ -1,164 +1,3 @@
-// import React, { useEffect, useState, useMemo } from "react";
-// import { Search, MapPin, CheckCircle, Clock, Filter } from "lucide-react";
-
-// export default function ManageDelivery() {
-//   // Load orders from localStorage
-//   const [orders, setOrders] = useState(() => {
-//     try {
-//       return JSON.parse(localStorage.getItem("orders")) || [
-//         {
-//           id: "ORD-003",
-//           client: "Laikipia Hotel",
-//           items: 20,
-//           address: "Laikipia",
-//           placement: "PHONE",
-//           deliveryDate: "2025-02-12",
-//           status: "DELIVERED",
-//         },
-//         {
-//           id: "ORD-004",
-//           client: "Nanyuki Mart",
-//           items: 12,
-//           address: "Nanyuki CBD",
-//           placement: "WEB",
-//           deliveryDate: "-",
-//           status: "PENDING",
-//         },
-//         {
-//           id: "ORD-005",
-//           client: "Mount Kenya Spa",
-//           items: 30,
-//           address: "Nanyuki",
-//           placement: "APP",
-//           deliveryDate: "-",
-//           status: "PENDING",
-//         },
-//       ];
-//     } catch {
-//       return [];
-//     }
-//   });
-
-//   // Filters
-//   const [search, setSearch] = useState("");
-//   const [statusFilter, setStatusFilter] = useState("ALL");
-
-//   // Filtered list
-//   const filtered = useMemo(() => {
-//     return orders.filter((o) => {
-//       if (statusFilter !== "ALL" && o.status !== statusFilter) return false;
-//       if (search.trim()) {
-//         const s = search.toLowerCase();
-//         if (
-//           !`${o.id} ${o.client} ${o.address}`
-//             .toLowerCase()
-//             .includes(s)
-//         )
-//           return false;
-//       }
-//       return true;
-//     });
-//   }, [orders, search, statusFilter]);
-
-//   return (
-//     <div className="pt-24 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
-
-//       {/* HEADER */}
-//       <div className="flex justify-between items-center mb-8">
-//         <div>
-//           <h1 className="text-3xl font-bold">Manage Delivery</h1>
-//           <p className="text-gray-500 mt-1">
-//             Track delivery progress for all approved orders. Checkers cannot modify delivery status.
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* FILTERS */}
-//       <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow mb-6 flex flex-col md:flex-row gap-4">
-
-//         {/* Search */}
-//         <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg px-3 py-2 w-full md:w-1/3">
-//           <Search size={18} className="text-gray-400" />
-//           <input
-//             value={search}
-//             onChange={(e) => setSearch(e.target.value)}
-//             placeholder="Search by client, order ID or address..."
-//             className="bg-transparent outline-none px-2 w-full"
-//           />
-//         </div>
-
-//         {/* Status Filter */}
-//         <select
-//           value={statusFilter}
-//           onChange={(e) => setStatusFilter(e.target.value)}
-//           className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 w-full md:w-40"
-//         >
-//           <option value="ALL">All Status</option>
-//           <option value="PENDING">Pending</option>
-//           <option value="DELIVERED">Delivered</option>
-//         </select>
-//       </div>
-
-//       {/* TABLE */}
-//       <div className="bg-white dark:bg-gray-900 rounded-xl shadow overflow-x-auto">
-//         <table className="w-full text-left min-w-[900px]">
-//           <thead className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm">
-//             <tr>
-//               <th className="py-3 px-4">Order ID</th>
-//               <th className="py-3 px-4">Client</th>
-//               <th className="py-3 px-4">Items</th>
-//               <th className="py-3 px-4">Address</th>
-//               <th className="py-3 px-4">Placement</th>
-//               <th className="py-3 px-4">Status</th>
-//               <th className="py-3 px-4">Delivery Date</th>
-//             </tr>
-//           </thead>
-
-//           <tbody>
-//             {filtered.length === 0 && (
-//               <tr>
-//                 <td colSpan={7} className="text-center py-6 text-gray-500">
-//                   No deliveries match your filters.
-//                 </td>
-//               </tr>
-//             )}
-
-//             {filtered.map((o) => (
-//               <tr
-//                 key={o.id}
-//                 className="border-b dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-//               >
-//                 <td className="py-3 px-4 font-semibold">{o.id}</td>
-//                 <td className="py-3 px-4">{o.client}</td>
-//                 <td className="py-3 px-4">{o.items}</td>
-//                 <td className="py-3 px-4 flex items-center gap-2">
-//                   <MapPin size={16} className="text-gray-400" /> {o.address}
-//                 </td>
-//                 <td className="py-3 px-4">{o.placement}</td>
-
-//                 {/* Status badge */}
-//                 <td className="py-3 px-4">
-//                   {o.status === "DELIVERED" ? (
-//                     <span className="px-3 py-1 rounded-full bg-green-200 text-green-800 text-sm font-semibold flex items-center gap-1 w-fit">
-//                       <CheckCircle size={14} /> Delivered
-//                     </span>
-//                   ) : (
-//                     <span className="px-3 py-1 rounded-full bg-yellow-200 text-yellow-800 text-sm font-semibold flex items-center gap-1 w-fit">
-//                       <Clock size={14} /> Pending
-//                     </span>
-//                   )}
-//                 </td>
-
-//                 <td className="py-3 px-4">{o.deliveryDate || "-"}</td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       </div>
-
-//     </div>
-//   );
-// }
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   Search,
@@ -216,6 +55,7 @@ export default function ManageDelivery() {
       client: "Laikipia Hotel",
       items: 20,
       address: "Laikipia",
+      driver: "Driver David",
       placement: "PHONE",
       deliveryDate: "2025-02-12",
       status: "DELIVERED",
@@ -230,6 +70,7 @@ export default function ManageDelivery() {
       client: "Nanyuki Mart",
       items: 12,
       address: "Nanyuki CBD",
+      driver: "Driver John",
       placement: "WEB",
       deliveryDate: null,
       status: "PENDING",
@@ -241,6 +82,7 @@ export default function ManageDelivery() {
       client: "Mount Kenya Spa",
       items: 30,
       address: "Nanyuki",
+      driver: "Driver James",
       placement: "APP",
       deliveryDate: null,
       status: "PENDING",
@@ -268,7 +110,7 @@ export default function ManageDelivery() {
       if (statusFilter !== "ALL" && o.status !== statusFilter) return false;
       if (search.trim()) {
         const s = search.trim().toLowerCase();
-        const hay = `${o.id} ${o.client} ${o.address} ${o.placement}`.toLowerCase();
+        const hay = `${o.id} ${o.client} ${o.address} ${o.placement} ${o.driver}`.toLowerCase();
         if (!hay.includes(s)) return false;
       }
       return true;
@@ -299,6 +141,7 @@ export default function ManageDelivery() {
           client: update.client || "Unknown",
           items: update.items || 0,
           address: update.address || "",
+          driver: update.driver || "Unassigned",
           placement: update.placement || "WEB",
           deliveryDate: update.deliveryDate || null,
           status: update.status || "PENDING",
@@ -524,9 +367,15 @@ export default function ManageDelivery() {
                 </div>
               </div>
 
-              <div className="mb-4">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
                 <div className="text-sm text-gray-500">Address</div>
                 <div className="mt-1">{selected.address}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Driver</div>
+                  <div className="mt-1 font-semibold">{selected.driver || "-"}</div>
+                </div>
               </div>
 
               <div className="mb-4">

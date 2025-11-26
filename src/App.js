@@ -139,6 +139,8 @@ import Clients from "./pages/maker/Clients";
 import Orders from "./pages/maker/Orders";
 import Production from "./pages/maker/Production";
 import Profile from "./pages/maker/Profile";
+import Inventory from "./pages/maker/Inventory";
+import StockIn from "./pages/maker/StockIn";
 
 // Checker pages
 import CheckerDashboard from "./pages/checker/CheckerDashboard";
@@ -147,13 +149,17 @@ import ManageOrders from "./pages/checker/ManageOrders";
 import ManageProduction from "./pages/checker/ManageProduction";
 import ManageInvoices from "./pages/checker/ManageInvoices";
 import ManageDelivery from "./pages/checker/ManageDelivery";
+import CheckerStockApproval from "./pages/checker/CheckerStockApproval";
 import StockMovement from "./pages/checker/StockMovement";
 
 // Admin pages
 import AdminDashboard from "./Admin/AdminDashboard";
 import UsersDetails from "./Admin/UserDetails";
 import ManageSales from "./Admin/ManageSales";
-import Inventory from "./pages/maker/Inventory";
+import CheckerProfile from "./pages/checker/CheckerProfile";
+import DriverDashboard from "./pages/driver/DriverDashboard";
+import DriverOrders from "./pages/driver/DriverOrders";
+import DriverProfile from "./pages/driver/DriverProfile";
 
 const App = () => {
   const location = useLocation();
@@ -196,6 +202,17 @@ const App = () => {
             <Route path="/production" element={<Production />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/inventory" element={<Inventory />} />
+            <Route path="/stock" element={<StockIn />} />
+          </>
+        )}
+
+        {/* Driver routes */}
+        {role === "driver" && loggedIn && (
+          <>
+            <Route path="/driver/dashboard" element={<DriverDashboard />} />
+            <Route path="/driver/orders" element={<DriverOrders />} />
+            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/driver/profile" element={<DriverProfile />} /> */}
           </>
         )}
 
@@ -208,6 +225,9 @@ const App = () => {
             <Route path="/checker/production" element={<ManageProduction />} />
             <Route path="/checker/invoices" element={<ManageInvoices />} />
             <Route path="/checker/delivery" element={<ManageDelivery />} />
+            <Route path="/checker/stock" element={<CheckerStockApproval />} />
+            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/checker/profile" element={<CheckerProfile />} /> */}
             {/* <Route path="/checker/stock" element={<StockMovement />} /> */}
             <Route path="/inventory" element={<Inventory />} />
           </>

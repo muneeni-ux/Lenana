@@ -10,13 +10,16 @@ import {
   MapPin,
   Package,
   Calendar,
+  UserCheck,
 } from "lucide-react";
+
 import RejectReasonModal from "../../components/cards/RejectReasonModal";
 
 function ManageOrders() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("PENDING");
   const [expanded, setExpanded] = useState(null);
+
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
@@ -34,6 +37,7 @@ function ManageOrders() {
       status: "PENDING",
       createdBy: "Maker John",
       rejectionReason: "",
+      assignedDriver: null,
     },
     {
       id: "ORD-002",
@@ -45,33 +49,28 @@ function ManageOrders() {
       status: "APPROVED",
       createdBy: "Maker Sarah",
       rejectionReason: "",
-    },
-    {
-      id: "ORD-003",
-      client: "Laikipia Hotel",
-      items: [
-        { product: "10L Bottle", qty: 15, price: 160 },
-        { product: "Small Pack", qty: 50, price: 120 },
-      ],
-      total: 15 * 160 + 50 * 120,
-      address: "Laikipia Highway",
-      date: "2025-02-05",
-      status: "REJECTED",
-      createdBy: "Maker Peter",
-      rejectionReason: "Insufficient credit limit",
+      assignedDriver: null,
     },
   ]);
+
+  // Hardcoded drivers
+  const drivers = [
+    { id: "DRV-001", name: "James Kariuki" },
+    { id: "DRV-002", name: "Alice Njeri" },
+    { id: "DRV-003", name: "Peter Mwangi" },
+  ];
+
+  const [selectedDriver, setSelectedDriver] = useState({});
 
   const statusBadge = (status) => {
     const map = {
       PENDING: "bg-yellow-200 text-yellow-700",
       APPROVED: "bg-green-200 text-green-700",
       REJECTED: "bg-red-200 text-red-700",
+      ASSIGNED: "bg-blue-200 text-blue-700",
     };
     return (
-      <span
-        className={`px-3 py-1 rounded-full text-sm font-semibold ${map[status]}`}
-      >
+      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${map[status]}`}>
         {status}
       </span>
     );
@@ -80,12 +79,15 @@ function ManageOrders() {
   const filteredOrders = orders.filter((order) => {
     const matchesStatus =
       statusFilter === "ALL" ? true : order.status === statusFilter;
+
     const matchesSearch =
       order.client.toLowerCase().includes(search.toLowerCase()) ||
       order.id.toLowerCase().includes(search.toLowerCase());
 
     return matchesSearch && matchesStatus;
   });
+
+  /* ------------------ ACTIONS ------------------ */
 
   const approveOrder = (id) => {
     setOrders((prev) =>
@@ -110,6 +112,30 @@ function ManageOrders() {
     );
     setRejectModalOpen(false);
   };
+
+  const assignDriver = (orderId) => {
+    if (!selectedDriver[orderId]) {
+      alert("Please choose a driver first.");
+      return;
+    }
+
+    const driver = drivers.find((d) => d.id === selectedDriver[orderId]);
+    if (!driver) return;
+
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === orderId
+          ? {
+              ...o,
+              assignedDriver: driver,
+              status: "ASSIGNED",
+            }
+          : o
+      )
+    );
+  };
+
+  /* ------------------ UI ------------------ */
 
   return (
     <div className="pt-24 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all">
@@ -136,18 +162,18 @@ function ManageOrders() {
         >
           <option value="PENDING">Pending</option>
           <option value="APPROVED">Approved</option>
+          <option value="ASSIGNED">Driver Assigned</option>
           <option value="REJECTED">Rejected</option>
           <option value="ALL">All Orders</option>
         </select>
       </div>
 
-      {/* Order List */}
+      {/* Order Cards */}
       <div className="grid md:grid-cols-2 gap-6">
         {filteredOrders.map((order, index) => (
-          <div
-            key={index}
-            className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl transition"
-          >
+          <div key={index} className="p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl transition">
+
+            {/* Header */}
             <div className="flex justify-between items-start mb-3">
               <div>
                 <h2 className="text-xl font-bold">{order.id}</h2>
@@ -166,26 +192,13 @@ function ManageOrders() {
               <Calendar size={16} /> {order.date}
             </p>
 
-            <p className="text-sm mb-2">
-              Created By: <span className="font-semibold">{order.createdBy}</span>
-            </p>
-
-            {/* Expand */}
+            {/* Expand Details */}
             <button
-              onClick={() =>
-                setExpanded(expanded === order.id ? null : order.id)
-              }
+              onClick={() => setExpanded(expanded === order.id ? null : order.id)}
               className="flex items-center gap-2 text-green-600 hover:underline text-sm mt-3"
             >
-              {expanded === order.id ? (
-                <>
-                  Hide Details <ChevronUp size={18} />
-                </>
-              ) : (
-                <>
-                  View Details <ChevronDown size={18} />
-                </>
-              )}
+              {expanded === order.id ? "Hide Details" : "View Details"}
+              {expanded === order.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
 
             {/* Items */}
@@ -197,14 +210,9 @@ function ManageOrders() {
 
                 <div className="space-y-2">
                   {order.items.map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex justify-between text-sm border-b border-gray-300 dark:border-gray-600 pb-2"
-                    >
+                    <div key={i} className="flex justify-between text-sm border-b border-gray-300 dark:border-gray-600 pb-2">
                       <span>{item.product} × {item.qty}</span>
-                      <span className="font-semibold">
-                        KSh {item.qty * item.price}
-                      </span>
+                      <span className="font-semibold">KSh {item.qty * item.price}</span>
                     </div>
                   ))}
                 </div>
@@ -213,19 +221,20 @@ function ManageOrders() {
                   Total: KSh {order.total.toLocaleString()}
                 </p>
 
-                {/* Show rejection reason */}
                 {order.status === "REJECTED" && order.rejectionReason && (
-                  <div className="mt-4 bg-red-100 dark:bg-red-900/30 p-3 rounded-lg text-sm text-red-700 dark:text-red-300">
+                  <div className="mt-4 bg-red-100 dark:bg-red-900/30 p-3 rounded-lg text-sm">
                     <strong>Rejection Reason:</strong> {order.rejectionReason}
                   </div>
                 )}
               </div>
             )}
 
-            {/* ACTION BUTTONS */}
-            <div className="mt-5 flex gap-3">
+            {/* ACTIONS */}
+            <div className="mt-5 flex flex-col gap-3">
+
+              {/* Pending */}
               {order.status === "PENDING" && (
-                <>
+                <div className="flex gap-3">
                   <button
                     onClick={() => approveOrder(order.id)}
                     className="flex-1 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center gap-2"
@@ -239,33 +248,55 @@ function ManageOrders() {
                   >
                     <XCircle size={18} /> Reject
                   </button>
-                </>
+                </div>
               )}
 
+              {/* Approved → Driver assignment */}
               {order.status === "APPROVED" && (
-                <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2">
-                  <ArrowRightCircle size={18} />
-                  Generate Invoice
-                </button>
+                <div className="space-y-3">
+                  <p className="font-semibold text-gray-700 dark:text-gray-300">Assign Driver:</p>
+
+                  <select
+                    className="w-full px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600"
+                    value={selectedDriver[order.id] || ""}
+                    onChange={(e) =>
+                      setSelectedDriver((prev) => ({
+                        ...prev,
+                        [order.id]: e.target.value,
+                      }))
+                    }
+                  >
+                    <option value="">Select a driver...</option>
+                    {drivers.map((d) => (
+                      <option key={d.id} value={d.id}>{d.name}</option>
+                    ))}
+                  </select>
+
+                  <button
+                    onClick={() => assignDriver(order.id)}
+                    className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"
+                  >
+                    <UserCheck size={18} /> Assign Driver
+                  </button>
+                </div>
               )}
 
-              {order.status === "REJECTED" && (
-                <p className="w-full text-center text-red-600 font-semibold">
-                  Order Rejected
-                </p>
+              {/* Assigned */}
+              {order.status === "ASSIGNED" && (
+                <div className="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-lg text-blue-800 dark:text-blue-300">
+                  Assigned to: <strong>{order.assignedDriver?.name}</strong>
+                </div>
               )}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Reject Modal */}
       <RejectReasonModal
         open={rejectModalOpen}
         onClose={() => setRejectModalOpen(false)}
         onSubmit={submitRejection}
       />
-
     </div>
   );
 }

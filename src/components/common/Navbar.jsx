@@ -21,6 +21,8 @@ import {
   Info,
   Phone,
   ShoppingCart,
+  Box,
+  BoxIcon,
 } from "lucide-react";
 
 const Navbar = ({ role, loggedIn }) => {
@@ -60,6 +62,12 @@ const Navbar = ({ role, loggedIn }) => {
     { path: "/production", label: "Production", icon: <Package size={16} /> },
     { path: "/clients", label: "Clients", icon: <Users size={16} /> },
     { path: "/inventory", label: "Inventory", icon: <FileText size={16} /> },
+    { path: "/stock", label: "Stock-In", icon: <Box size={16} />},
+  ];
+
+  const driverNav = [
+    { path: "/driver/dashboard", label: "Dashboard", icon: <BarChart size={16} /> },
+    { path: "/driver/orders", label: "Orders", icon: <ShoppingBag size={16} /> },
   ];
 
   const checkerNav = [
@@ -86,6 +94,7 @@ const Navbar = ({ role, loggedIn }) => {
     },
     { path: "/checker/delivery", label: "Delivery", icon: <Truck size={16} /> },
     { path: "/inventory", label: "Inventory", icon: <Layers size={16} /> },
+    { path: "/checker/stock", label: "Stock-In", icon: <BoxIcon size={16} /> },
   ];
 
   const adminNav = [
@@ -100,6 +109,7 @@ const Navbar = ({ role, loggedIn }) => {
 
   let navItems = guestNav;
   if (loggedIn && role === "maker") navItems = makerNav;
+  if (loggedIn && role === "driver") navItems = driverNav;
   if (loggedIn && role === "checker") navItems = checkerNav;
   if (loggedIn && role === "admin") navItems = adminNav;
 
@@ -224,7 +234,7 @@ const Navbar = ({ role, loggedIn }) => {
       >
         <div className="flex items-center justify-between px-5 py-5 bg-white/10 dark:bg-black/20 backdrop-blur-md border-b border-white/20 dark:border-gray-700">
           <div className="flex items-center gap-3">
-            <Droplet size={24} className="text-white" />
+            <Droplet size={24} className="text-black dark:text-white" />
             <h2 className="text-xl font-semibold">Menu</h2>
           </div>
           <button onClick={() => setMenuOpen(false)}>

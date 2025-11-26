@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { User, Lock, Camera } from "lucide-react";
+import toast from "react-hot-toast";
+
 
 function Profile() {
   const storedUser = JSON.parse(localStorage.getItem("user")) || {
@@ -10,6 +12,7 @@ function Profile() {
 
   const [userData, setUserData] = useState({
     username: storedUser.username,
+    role: storedUser.role || "Maker",
     email: storedUser.email,
     phone: storedUser.phone,
   });
@@ -24,17 +27,17 @@ function Profile() {
     e.preventDefault();
     // Later -> send to backend
     localStorage.setItem("user", JSON.stringify(userData));
-    alert("Profile updated successfully!");
+    toast.success("Profile updated successfully!");
   };
 
   const handlePasswordChange = (e) => {
     e.preventDefault();
     if (passwords.newPass !== passwords.confirm) {
-      alert("New passwords do not match.");
+      toast.error("New passwords do not match.");
       return;
     }
 
-    alert("Password updated!");
+    toast.success("Password updated!");
     setPasswords({ current: "", newPass: "", confirm: "" });
   };
 
@@ -49,9 +52,9 @@ function Profile() {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col items-center">
           <div className="relative">
             <img
-              src="https://via.placeholder.com/120"
+              src="https://cdn-icons-png.flaticon.com/512/5987/5987420.png"
               alt="Profile"
-              className="w-32 h-32 rounded-full object-cover border-4 border-green-600 shadow"
+              className="w-32 h-32 rounded-full object-cover shadow"
             />
 
             {/* Upload Button */}
@@ -64,7 +67,7 @@ function Profile() {
           <p className="text-gray-600 dark:text-gray-300">{userData.email}</p>
 
           <div className="mt-6 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-100 px-6 py-2 rounded-lg font-semibold">
-            Maker Role
+          {userData.role} Role
           </div>
         </div>
 
