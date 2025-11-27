@@ -25,7 +25,7 @@ import {
   BoxIcon,
 } from "lucide-react";
 
-const Navbar = ({ role, loggedIn }) => {
+const Navbar = ({ loggedIn }) => {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
@@ -44,9 +44,10 @@ const Navbar = ({ role, loggedIn }) => {
     return () => document.removeEventListener("mousedown", closeDropdown);
   }, []);
 
-  const user = JSON.parse(localStorage.getItem("user")) || {
-    username: "Guest",
-  };
+  // Get logged user (from backend JWT login)
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+
+  const role = user?.role ? user.role.toUpperCase() : null;
 
   /* --------------------------- NAV ITEMS ---------------------------- */
   const guestNav = [
@@ -62,12 +63,20 @@ const Navbar = ({ role, loggedIn }) => {
     { path: "/production", label: "Production", icon: <Package size={16} /> },
     { path: "/clients", label: "Clients", icon: <Users size={16} /> },
     { path: "/inventory", label: "Inventory", icon: <FileText size={16} /> },
-    { path: "/stock", label: "Stock-In", icon: <Box size={16} />},
+    { path: "/stock", label: "Stock-In", icon: <Box size={16} /> },
   ];
 
   const driverNav = [
-    { path: "/driver/dashboard", label: "Dashboard", icon: <BarChart size={16} /> },
-    { path: "/driver/orders", label: "Orders", icon: <ShoppingBag size={16} /> },
+    {
+      path: "/driver/dashboard",
+      label: "Dashboard",
+      icon: <BarChart size={16} />,
+    },
+    {
+      path: "/driver/orders",
+      label: "Orders",
+      icon: <ShoppingBag size={16} />,
+    },
   ];
 
   const checkerNav = [
@@ -107,11 +116,13 @@ const Navbar = ({ role, loggedIn }) => {
     { path: "/admin/sales", label: "Sales", icon: <ShoppingBag size={16} /> },
   ];
 
+  // NAV based on backend roles
   let navItems = guestNav;
-  if (loggedIn && role === "maker") navItems = makerNav;
-  if (loggedIn && role === "driver") navItems = driverNav;
-  if (loggedIn && role === "checker") navItems = checkerNav;
-  if (loggedIn && role === "admin") navItems = adminNav;
+
+  if (loggedIn && role === "MAKER") navItems = makerNav;
+  if (loggedIn && role === "DRIVER") navItems = driverNav;
+  if (loggedIn && role === "CHECKER") navItems = checkerNav;
+  if (loggedIn && role === "OWNER") navItems = adminNav; // OWNER = superadmin
 
   /* --------------------------- LOGOUT ---------------------------- */
   const handleLogout = () => {
@@ -192,7 +203,9 @@ const Navbar = ({ role, loggedIn }) => {
                 className="flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-gray-700 rounded-lg"
               >
                 <User className="text-amber-600 dark:text-amber-300" />
-                <span className="text-sm">{user.username}</span>
+                <span className="text-sm">
+                  {user?.username || user?.firstName || "User"}
+                </span>
               </button>
 
               {dropdownOpen && (

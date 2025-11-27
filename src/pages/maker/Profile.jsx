@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { User, Lock, Camera } from "lucide-react";
+import { User, Lock, Camera, Phone } from "lucide-react";
 import toast from "react-hot-toast";
-
 
 function Profile() {
   const storedUser = JSON.parse(localStorage.getItem("user")) || {
-    username: "Maker User",
-    email: "maker@example.com",
-    phone: "+254 700 000 000",
+    username: "User",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    role: "",
   };
 
   const [userData, setUserData] = useState({
     username: storedUser.username,
-    role: storedUser.role || "Maker",
+    firstName: storedUser.firstName,
+    lastName: storedUser.lastName,
     email: storedUser.email,
     phone: storedUser.phone,
+    role: storedUser.role?.toUpperCase(),
   });
 
   const [passwords, setPasswords] = useState({
@@ -25,7 +29,6 @@ function Profile() {
 
   const handleProfileSave = (e) => {
     e.preventDefault();
-    // Later -> send to backend
     localStorage.setItem("user", JSON.stringify(userData));
     toast.success("Profile updated successfully!");
   };
@@ -42,13 +45,11 @@ function Profile() {
   };
 
   return (
-    <div className="pt-24 px-6 pb-16 text-gray-800 dark:text-gray-100 transition-all">
+    <div className="pt-24 px-6 pb-24 text-gray-800 dark:text-gray-100 transition-all">
       <h1 className="text-3xl font-bold mb-8">My Profile</h1>
 
-      {/* Wrapper */}
       <div className="grid lg:grid-cols-3 gap-10">
-
-        {/* LEFT — PROFILE CARD */}
+        {/* LEFT PROFILE CARD */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6 flex flex-col items-center">
           <div className="relative">
             <img
@@ -67,14 +68,14 @@ function Profile() {
           <p className="text-gray-600 dark:text-gray-300">{userData.email}</p>
 
           <div className="mt-6 bg-green-100 dark:bg-green-700 text-green-800 dark:text-green-100 px-6 py-2 rounded-lg font-semibold">
-          {userData.role} Role
+            {userData.role} Role
           </div>
         </div>
 
-        {/* RIGHT SECTION — PROFILE FORM + PASSWORD */}
+        {/* RIGHT SIDE */}
         <div className="lg:col-span-2 space-y-10">
 
-          {/* 🚀 Update Profile Info */}
+          {/* PROFILE FORM */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <User size={20} /> Personal Information
@@ -83,7 +84,7 @@ function Profile() {
             <form onSubmit={handleProfileSave} className="grid md:grid-cols-2 gap-6">
 
               <div>
-                <label className="text-sm font-semibold">Name</label>
+                <label className="text-sm font-semibold">Username</label>
                 <input
                   type="text"
                   required
@@ -133,7 +134,7 @@ function Profile() {
             </form>
           </div>
 
-          {/* 🔐 Password Change */}
+          {/* PASSWORD FORM */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <Lock size={20} /> Change Password
@@ -194,6 +195,14 @@ function Profile() {
 
         </div>
       </div>
+
+      {/* 📞 SUPPORT CALL BUTTON */}
+      <a
+        href="tel:+254700000000"
+        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg vibrate"
+      >
+        <Phone size={30} />
+      </a>
     </div>
   );
 }

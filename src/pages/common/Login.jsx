@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, LogIn, Droplet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"
+
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";;
 
 function Login() {
   const navigate = useNavigate();
@@ -9,26 +11,66 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+
+  //   if (!email || !password) {
+  //     toast.error("Please enter email and password");
+  //     return;
+  //   }
+
+  //   // 🔐 For now simulate Checker login
+  //   localStorage.setItem("loggedIn", "true");
+  //   localStorage.setItem(
+  //     "user",
+  //     JSON.stringify({ username: "Frank", role: "maker" })
+  //   );
+
+  //   toast.success("Logged in successfully");
+
+  //   navigate("/dashboard");
+  // };
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      toast.error("Please enter email and password");
-      return;
+    if (!email || !password) return toast.error("Fill all fields");
+
+    try {
+      const res = await fetch(`${SERVER_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) return toast.error(data.message);
+
+      // Save user + token
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      toast.success("Login successful");
+
+      // Redirect based on ROLE
+      const role = data.user.role.toUpperCase();
+
+      switch (role) {
+        case "MAKER":
+          return navigate("/dashboard");
+        case "CHECKER":
+          return navigate("/checker/dashboard");
+        case "DRIVER":
+          return navigate("/driver/dashboard");
+        case "OWNER":
+          return navigate("/admin/dashboard");
+        default:
+          return navigate("/");
+      }
+    } catch (err) {
+      toast.error("Server error");
     }
-
-    // 🔐 For now simulate Checker login
-    localStorage.setItem("loggedIn", "true");
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ username: "Frank", role: "driver" })
-    );
-
-    toast.success("Logged in successfully");
-
-    navigate("/dashboard");
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center px-6 relative bg-gray-100 dark:bg-gray-900">
       {/* Background Image */}

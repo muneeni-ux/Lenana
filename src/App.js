@@ -150,16 +150,13 @@ import ManageProduction from "./pages/checker/ManageProduction";
 import ManageInvoices from "./pages/checker/ManageInvoices";
 import ManageDelivery from "./pages/checker/ManageDelivery";
 import CheckerStockApproval from "./pages/checker/CheckerStockApproval";
-import StockMovement from "./pages/checker/StockMovement";
 
 // Admin pages
 import AdminDashboard from "./Admin/AdminDashboard";
 import UsersDetails from "./Admin/UserDetails";
 import ManageSales from "./Admin/ManageSales";
-import CheckerProfile from "./pages/checker/CheckerProfile";
 import DriverDashboard from "./pages/driver/DriverDashboard";
 import DriverOrders from "./pages/driver/DriverOrders";
-import DriverProfile from "./pages/driver/DriverProfile";
 
 const App = () => {
   const location = useLocation();
@@ -167,7 +164,7 @@ const App = () => {
   // Simulated auth from localStorage
   const loggedIn = localStorage.getItem("loggedIn") === "true";
   const user = JSON.parse(localStorage.getItem("user")) || null;
-  const role = user?.role || "guest";
+  const role = user?.role ? user.role.toUpperCase() : null;
 
   // Hide navbar only for login
   const hideNavPaths = ["/login"];
@@ -194,7 +191,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
 
         {/* 🚀 Maker Routes */}
-        {role === "maker" && loggedIn && (
+        {role === "MAKER" && loggedIn && (
           <>
             <Route path="/dashboard" element={<MakerDashboard />} />
             <Route path="/clients" element={<Clients />} />
@@ -207,7 +204,7 @@ const App = () => {
         )}
 
         {/* Driver routes */}
-        {role === "driver" && loggedIn && (
+        {role === "DRIVER" && loggedIn && (
           <>
             <Route path="/driver/dashboard" element={<DriverDashboard />} />
             <Route path="/driver/orders" element={<DriverOrders />} />
@@ -217,7 +214,7 @@ const App = () => {
         )}
 
         {/* 🚀 Checker Routes */}
-        {role === "checker" && loggedIn && (
+        {role === "CHECKER" && loggedIn && (
           <>
             <Route path="/checker/dashboard" element={<CheckerDashboard />} />
             <Route path="/checker/clients" element={<ManageClients />} />
@@ -234,7 +231,7 @@ const App = () => {
         )}
 
         {/* 🚀 Admin Routes */}
-        {role === "admin" && loggedIn && (
+        {role === "OWNER" && loggedIn && (
           <>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/users" element={<UsersDetails />} />
