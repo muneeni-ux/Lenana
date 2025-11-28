@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { User, Lock, Camera, Phone } from "lucide-react";
 import toast from "react-hot-toast";
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
+
 function Profile() {
   const storedUser = JSON.parse(localStorage.getItem("user")) || {
     username: "User",
@@ -27,21 +29,63 @@ function Profile() {
     confirm: "",
   });
 
-  const handleProfileSave = (e) => {
+  const handleProfileSave = async (e) => {
     e.preventDefault();
-    localStorage.setItem("user", JSON.stringify(userData));
-    toast.success("Profile updated successfully!");
-  };
 
-  const handlePasswordChange = (e) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${SERVER_URL}/api/auth/update-profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) return toast.error(data.message);
+
+      localStorage.setItem("user", JSON.stringify(userData));
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      toast.error("Server error");
+    }
+  };
+  const handlePasswordChange = async (e) => {
     e.preventDefault();
+
     if (passwords.newPass !== passwords.confirm) {
-      toast.error("New passwords do not match.");
+      toast.error("New passwords do not match");
       return;
     }
 
-    toast.success("Password updated!");
-    setPasswords({ current: "", newPass: "", confirm: "" });
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${SERVER_URL}/api/auth/change-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          current: passwords.current,
+          newPass: passwords.newPass,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) return toast.error(data.message);
+
+      toast.success("Password updated!");
+      setPasswords({ current: "", newPass: "", confirm: "" });
+    } catch {
+      toast.error("Server error");
+    }
   };
 
   return (
@@ -74,15 +118,16 @@ function Profile() {
 
         {/* RIGHT SIDE */}
         <div className="lg:col-span-2 space-y-10">
-
           {/* PROFILE FORM */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
             <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
               <User size={20} /> Personal Information
             </h2>
 
-            <form onSubmit={handleProfileSave} className="grid md:grid-cols-2 gap-6">
-
+            <form
+              onSubmit={handleProfileSave}
+              className="grid md:grid-cols-2 gap-6"
+            >
               <div>
                 <label className="text-sm font-semibold">Username</label>
                 <input
@@ -130,7 +175,6 @@ function Profile() {
                   Save Changes
                 </button>
               </div>
-
             </form>
           </div>
 
@@ -140,10 +184,14 @@ function Profile() {
               <Lock size={20} /> Change Password
             </h2>
 
-            <form onSubmit={handlePasswordChange} className="grid md:grid-cols-2 gap-6">
-
+            <form
+              onSubmit={handlePasswordChange}
+              className="grid md:grid-cols-2 gap-6"
+            >
               <div>
-                <label className="text-sm font-semibold">Current Password</label>
+                <label className="text-sm font-semibold">
+                  Current Password
+                </label>
                 <input
                   type="password"
                   required
@@ -169,7 +217,9 @@ function Profile() {
               </div>
 
               <div>
-                <label className="text-sm font-semibold">Confirm New Password</label>
+                <label className="text-sm font-semibold">
+                  Confirm New Password
+                </label>
                 <input
                   type="password"
                   required
@@ -189,10 +239,8 @@ function Profile() {
                   Update Password
                 </button>
               </div>
-
             </form>
           </div>
-
         </div>
       </div>
 

@@ -124,128 +124,132 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import ScrollToTop from "./components/common/scrollTop";
-import Navbar from "./components/common/Navbar";
-import Footer from "./components/common/Footer";
+// Added .jsx extension to imports to help resolver find modules
+import ScrollToTop from "./components/common/scrollTop.jsx"; 
+import Navbar from "./components/common/Navbar.jsx";
+import Footer from "./components/common/Footer.jsx";
 
 // Public pages
-import Home from "./pages/common/Home";
-import Login from "./pages/common/Login";
-import NotFound from "./pages/common/NotFound";
+import Home from "./pages/common/Home.jsx";
+import Login from "./pages/common/Login.jsx";
+import NotFound from "./pages/common/NotFound.jsx";
 
 // Maker pages
-import MakerDashboard from "./pages/maker/MakerDashboard";
-import Clients from "./pages/maker/Clients";
-import Orders from "./pages/maker/Orders";
-import Production from "./pages/maker/Production";
-import Profile from "./pages/maker/Profile";
-import Inventory from "./pages/maker/Inventory";
-import StockIn from "./pages/maker/StockIn";
+import MakerDashboard from "./pages/maker/MakerDashboard.jsx";
+import Clients from "./pages/maker/Clients.jsx";
+import Orders from "./pages/maker/Orders.jsx";
+import Production from "./pages/maker/Production.jsx";
+import Profile from "./pages/maker/Profile.jsx";
+import Inventory from "./pages/maker/Inventory.jsx";
+import StockIn from "./pages/maker/StockIn.jsx";
 
 // Checker pages
-import CheckerDashboard from "./pages/checker/CheckerDashboard";
-import ManageClients from "./pages/checker/ManageClients";
-import ManageOrders from "./pages/checker/ManageOrders";
-import ManageProduction from "./pages/checker/ManageProduction";
-import ManageInvoices from "./pages/checker/ManageInvoices";
-import ManageDelivery from "./pages/checker/ManageDelivery";
-import CheckerStockApproval from "./pages/checker/CheckerStockApproval";
+import CheckerDashboard from "./pages/checker/CheckerDashboard.jsx";
+import ManageClients from "./pages/checker/ManageClients.jsx";
+import ManageOrders from "./pages/checker/ManageOrders.jsx";
+import ManageProduction from "./pages/checker/ManageProduction.jsx";
+import ManageInvoices from "./pages/checker/ManageInvoices.jsx";
+import ManageDelivery from "./pages/checker/ManageDelivery.jsx";
+import CheckerStockApproval from "./pages/checker/CheckerStockApproval.jsx";
 
 // Admin pages
-import AdminDashboard from "./Admin/AdminDashboard";
-import UsersDetails from "./Admin/UserDetails";
-import ManageSales from "./Admin/ManageSales";
-import DriverDashboard from "./pages/driver/DriverDashboard";
-import DriverOrders from "./pages/driver/DriverOrders";
+import AdminDashboard from "./Admin/AdminDashboard.jsx";
+import UsersDetails from "./Admin/UserDetails.jsx";
+import ManageSales from "./Admin/ManageSales.jsx";
+import DriverDashboard from "./pages/driver/DriverDashboard.jsx";
+import DriverOrders from "./pages/driver/DriverOrders.jsx";
 
 const App = () => {
-  const location = useLocation();
+  const location = useLocation();
 
-  // Simulated auth from localStorage
-  const loggedIn = localStorage.getItem("loggedIn") === "true";
-  const user = JSON.parse(localStorage.getItem("user")) || null;
-  const role = user?.role ? user.role.toUpperCase() : null;
+  // --- AUTHENTICATION FIX: Derive loggedIn status from the token ---
+  const token = localStorage.getItem("token");
+  // loggedIn is true if the token exists, otherwise false
+  const loggedIn = !!token; 
+  
+  const user = JSON.parse(localStorage.getItem("user")) || null;
+  const role = user?.role ? user.role.toUpperCase() : null;
 
-  // Hide navbar only for login
-  const hideNavPaths = ["/login"];
-  const shouldHideNav = hideNavPaths.includes(location.pathname);
+  // Hide navbar only for login
+  const hideNavPaths = ["/login"];
+  const shouldHideNav = hideNavPaths.includes(location.pathname);
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-all">
-      <ScrollToTop />
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-all">
+      <ScrollToTop />
 
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          success: { style: { background: "#D1FAE5", color: "#065F46" } },
-          error: { style: { background: "#FEE2E2", color: "#991B1B" } },
-        }}
-      />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          success: { style: { background: "#D1FAE5", color: "#065F46" } },
+          error: { style: { background: "#FEE2E2", color: "#991B1B" } },
+        }}
+      />
 
-      {/* Navbar visible for public + logged pages */}
-      {!shouldHideNav && <Navbar role={role} loggedIn={loggedIn} />}
-     <main className="min-h-screen bg-cream">
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+      {/* Navbar visible for public + logged pages */}
+      {!shouldHideNav && <Navbar role={role} loggedIn={loggedIn} />}
+     <main className="min-h-screen bg-cream">
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
 
-        {/* 🚀 Maker Routes */}
-        {role === "MAKER" && loggedIn && (
-          <>
-            <Route path="/dashboard" element={<MakerDashboard />} />
-            <Route path="/clients" element={<Clients />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/production" element={<Production />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/stock" element={<StockIn />} />
-          </>
-        )}
+        {/* 🚀 Maker Routes */}
+        {role === "MAKER" && loggedIn && (
+          <>
+            <Route path="/dashboard" element={<MakerDashboard />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/production" element={<Production />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/inventory" element={<Inventory />} />
+            <Route path="/stock" element={<StockIn />} />
+          </>
+        )}
 
-        {/* Driver routes */}
-        {role === "DRIVER" && loggedIn && (
-          <>
-            <Route path="/driver/dashboard" element={<DriverDashboard />} />
-            <Route path="/driver/orders" element={<DriverOrders />} />
-            <Route path="/profile" element={<Profile />} />
-            {/* <Route path="/driver/profile" element={<DriverProfile />} /> */}
-          </>
-        )}
+        {/* Driver routes */}
+        {role === "DRIVER" && loggedIn && (
+          <>
+            <Route path="/driver/dashboard" element={<DriverDashboard />} />
+            <Route path="/driver/orders" element={<DriverOrders />} />
+            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/driver/profile" element={<DriverProfile />} /> */}
+          </>
+        )}
 
-        {/* 🚀 Checker Routes */}
-        {role === "CHECKER" && loggedIn && (
-          <>
-            <Route path="/checker/dashboard" element={<CheckerDashboard />} />
-            <Route path="/checker/clients" element={<ManageClients />} />
-            <Route path="/checker/orders" element={<ManageOrders />} />
-            <Route path="/checker/production" element={<ManageProduction />} />
-            <Route path="/checker/invoices" element={<ManageInvoices />} />
-            <Route path="/checker/delivery" element={<ManageDelivery />} />
-            <Route path="/checker/stock" element={<CheckerStockApproval />} />
-            <Route path="/profile" element={<Profile />} />
-            {/* <Route path="/checker/profile" element={<CheckerProfile />} /> */}
-            {/* <Route path="/checker/stock" element={<StockMovement />} /> */}
-            <Route path="/inventory" element={<Inventory />} />
-          </>
-        )}
+        {/* 🚀 Checker Routes */}
+        {role === "CHECKER" && loggedIn && (
+          <>
+            <Route path="/checker/dashboard" element={<CheckerDashboard />} />
+            <Route path="/checker/clients" element={<ManageClients />} />
+            <Route path="/checker/orders" element={<ManageOrders />} />
+            <Route path="/checker/production" element={<ManageProduction />} />
+            <Route path="/checker/invoices" element={<ManageInvoices />} />
+            <Route path="/checker/delivery" element={<ManageDelivery />} />
+            <Route path="/checker/stock" element={<CheckerStockApproval />} />
+            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/checker/profile" element={<CheckerProfile />} /> */}
+            {/* <Route path="/checker/stock" element={<StockMovement />} /> */}
+            <Route path="/inventory" element={<Inventory />} />
+          </>
+        )}
 
-        {/* 🚀 Admin Routes */}
-        {role === "OWNER" && loggedIn && (
-          <>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/users" element={<UsersDetails />} />
-            <Route path="/admin/sales" element={<ManageSales />} />
-          </>
-        )}
+        {/* 🚀 Admin Routes */}
+        {role === "OWNER" && loggedIn && (
+          <>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<UsersDetails />} />
+            <Route path="/admin/sales" element={<ManageSales />} />
+          </>
+        )}
 
-        {/* Catch-all */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-     </main>
-      <Footer />
-    </div>
-  );
+        {/* Catch-all */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+     </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default App;

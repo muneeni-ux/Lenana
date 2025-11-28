@@ -39,7 +39,7 @@ function Home() {
   ];
 
   return (
-    <div className="pt-16 transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
+    <div className="transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
       {/* ======================= HERO SECTION ======================= */}
       <section className="relative min-h-[90vh] flex items-center justify-center text-center px-6 overflow-hidden">
         <img

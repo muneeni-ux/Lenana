@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, use } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../../components/common/ThemeContext";
 import {
@@ -124,6 +124,15 @@ const Navbar = ({ loggedIn }) => {
   if (loggedIn && role === "CHECKER") navItems = checkerNav;
   if (loggedIn && role === "OWNER") navItems = adminNav; // OWNER = superadmin
 
+  const handleProfileClick = () => {
+    setDropdownOpen(false); // Correctly close dropdown first
+    navigate("/profile");
+  };
+
+const handlePClick = () => {
+    setMenuOpen(false); // Correctly close dropdown first
+    navigate("/profile");
+  };
   /* --------------------------- LOGOUT ---------------------------- */
   const handleLogout = () => {
     localStorage.clear();
@@ -211,7 +220,7 @@ const Navbar = ({ loggedIn }) => {
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden border dark:border-gray-700">
                   <button
-                    onClick={() => navigate("/profile")}
+                    onClick={() => handleProfileClick()}
                     className="px-4 py-3 text-sm flex gap-2 hover:bg-amber-100 dark:hover:bg-gray-700 w-full text-left"
                   >
                     <Settings size={16} />
@@ -284,7 +293,7 @@ const Navbar = ({ loggedIn }) => {
           ) : (
             <>
               <button
-                onClick={() => navigate("/profile")}
+                onClick={() => handlePClick()}
                 className="w-full p-3 rounded-lg text-left hover:bg-gray-200 dark:hover:bg-gray-700"
               >
                 <Settings className="inline-block mr-2" size={16} />

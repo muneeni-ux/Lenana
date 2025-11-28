@@ -4,16 +4,20 @@ import {
   signupOwner,
   loginUser,
   createUser,
+  updateProfile,
+  changePassword,
+  getAllUsers,
+  deleteUser,
 } from "../controllers/authController.js";
-import { requireRole } from "../middleware/requirerole.js";
+
+import { requireRole } from "../middleware/requireRole.js";
 import { authenticate } from "../middleware/authentication.js";
 
 const router = express.Router();
 
-// Middleware to decode token on every request
+// decode JWT
 router.use((req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
-
   if (token) {
     try {
       req.user = jwt.verify(token, process.env.JWT_SECRET);
@@ -24,13 +28,22 @@ router.use((req, res, next) => {
   next();
 });
 
-// Owner signup (first-time only)
 router.post("/owner/signup", signupOwner);
-
-// Login
 router.post("/login", loginUser);
 
-// Owner creates users
+// profile update
+router.put("/update-profile", authenticate, updateProfile);
+
+// change password
+router.put("/change-password", authenticate, changePassword);
+
+// owner create user
 router.post("/create-user", authenticate, requireRole(["OWNER"]), createUser);
+
+// owner get all users
+router.get("/users", authenticate, requireRole(["OWNER"]), getAllUsers);
+
+// owner delete user
+router.delete("/delete-user/:id", authenticate, requireRole(["OWNER"]), deleteUser);
 
 export default router;

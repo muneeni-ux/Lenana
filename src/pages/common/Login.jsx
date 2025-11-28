@@ -3,7 +3,7 @@ import { Mail, Lock, Eye, EyeOff, LogIn, Droplet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast"
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
 
 function Login() {
   const navigate = useNavigate();
