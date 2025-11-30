@@ -10,7 +10,7 @@ import {
   deleteUser,
 } from "../controllers/authController.js";
 
-import { requireRole } from "../middleware/requireRole.js";
+import { requireRole } from "../middleware/requirerole.js";
 import { authenticate } from "../middleware/authentication.js";
 
 const router = express.Router();

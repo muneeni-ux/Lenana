@@ -1,8 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
-import { X } from 'lucide-react';
+import React, { useState } from "react";
+import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
-function StockInForm({ onClose, onSubmit, categories }) {
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:8080";
+
+function StockInForm({ onClose, categories }) {
   const [category, setCategory] = useState("Crates");
   const [itemName, setItemName] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -10,32 +12,49 @@ function StockInForm({ onClose, onSubmit, categories }) {
 
   const total = quantity * unitCost;
 
-  const handleSubmit = () => {
-    // Validation: Only require itemName if category === "Other"
+  const token = localStorage.getItem("token");
+
+  const handleSubmit = async () => {
     if (category === "Other" && !itemName.trim()) {
-      alert("Please enter item name for category 'Other'");
+      toast.error("Please enter item name for category 'Other'");
       return;
     }
 
-    onSubmit({
-      id: crypto.randomUUID(),
-      recordId: "STK-" + Math.floor(Math.random() * 900 + 100),
+    const payload = {
       category,
-      itemName: category === "Other" ? itemName : category, // auto-assign
+      itemName: category === "Other" ? itemName : category,
       quantity: Number(quantity),
       unitCost: Number(unitCost),
       totalCost: total,
-      status: "PENDING_REVIEW",
-      date: new Date().toISOString().split("T")[0],
-    });
+    };
 
-    onClose();
+    try {
+      const res = await fetch(`${SERVER_URL}/api/stock-in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to submit stock record");
+      }
+
+      toast.success("Stock submitted for review!");
+      onClose();
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "An error occurred");
+    }
   };
 
   const handleCategoryChange = (value) => {
     setCategory(value);
 
-    // Auto-fill itemName for non-"Other" categories
     if (value !== "Other") {
       setItemName(value);
     } else {
@@ -73,7 +92,7 @@ function StockInForm({ onClose, onSubmit, categories }) {
             </select>
           </div>
 
-          {/* ITEM NAME – SHOW ONLY IF CATEGORY = OTHER */}
+          {/* ITEM NAME FIELD (ONLY WHEN OTHER) */}
           {category === "Other" && (
             <div className="mb-4">
               <label className="text-sm font-semibold">Item Name *</label>
@@ -118,7 +137,7 @@ function StockInForm({ onClose, onSubmit, categories }) {
             </span>
           </div>
 
-          {/* SUBMIT */}
+          {/* SUBMIT BUTTON */}
           <button
             onClick={handleSubmit}
             className="w-full mt-6 bg-green-600 text-white py-3 rounded-lg shadow hover:bg-green-700 transition"

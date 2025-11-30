@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express from 'express'; // Crucial: Import Express
 import cors from 'cors';
 import authRouter from './routes/auth.js'; 
-import { db } from "./db.js"; 
+import stockInRoutes from "./routes/stockInRoutes.js";
 
 // --- Configuration & Initialization ---
 const app = express(); // Crucial: Initialize the app object
@@ -26,6 +26,8 @@ app.use(cors(corsOptions));
 
 // --- API Routes ---
 app.use('/api/auth', authRouter); 
+app.use("/api/stock-in", stockInRoutes);
+
 
 
 // --- Start Server ---

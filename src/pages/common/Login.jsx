@@ -11,25 +11,6 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const handleLogin = (e) => {
-  //   e.preventDefault();
-
-  //   if (!email || !password) {
-  //     toast.error("Please enter email and password");
-  //     return;
-  //   }
-
-  //   // 🔐 For now simulate Checker login
-  //   localStorage.setItem("loggedIn", "true");
-  //   localStorage.setItem(
-  //     "user",
-  //     JSON.stringify({ username: "Frank", role: "maker" })
-  //   );
-
-  //   toast.success("Logged in successfully");
-
-  //   navigate("/dashboard");
-  // };
   const handleLogin = async (e) => {
     e.preventDefault();
 
