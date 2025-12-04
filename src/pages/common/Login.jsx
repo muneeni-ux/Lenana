@@ -53,7 +53,7 @@ function Login() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 relative bg-gray-100 dark:bg-gray-900">
+    <div className="flex items-center justify-center px-6 relative bg-gray-100 dark:bg-gray-900 min-h-screen overflow-hidden mt-[-3rem] mb-[-3rem] ">
       {/* Background Image */}
       <img
         src="https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg"
@@ -68,8 +68,13 @@ function Login() {
       <div className="relative w-full max-w-md bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl shadow-2xl rounded-2xl p-8 border border-white/40 dark:border-gray-700">
         {/* LOGO */}
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-yellow-600 dark:bg-yellow-500 p-3 rounded-full shadow-lg">
-            <Droplet className="text-white" size={28} />
+          <div className="bg-yellow-600 dark:bg-yellow-500 p-1 rounded-full shadow-lg">
+            {/* <Droplet className="text-white" size={28} /> */}
+            <img
+            src="./LenanaLogo3.jpg"
+            alt=""
+            className="h-12 w-12 rounded-full"
+          />
           </div>
           <h1 className="text-2xl font-extrabold text-yellow-700 dark:text-yellow-300 mt-3">
             Lenana Drops Portal

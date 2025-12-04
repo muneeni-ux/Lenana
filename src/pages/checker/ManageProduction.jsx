@@ -476,7 +476,7 @@ export default function ManageProduction() {
   };
 
   return (
-    <div className="pt-24 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
+    <div className="pt-16 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex items-start justify-between gap-6 mb-6">
         <div>

@@ -437,7 +437,7 @@ export default function Orders() {
   };
 
   return (
-    <div className="pt-24 px-6 pb-12 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
+    <div className="pt-16 px-6 pb-12 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold">Your Orders</h1>

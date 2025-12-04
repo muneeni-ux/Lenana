@@ -121,6 +121,7 @@
 // };
 
 // export default App;
+
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
@@ -173,6 +174,9 @@ const App = () => {
   // Hide navbar only for login
   const hideNavPaths = ["/login"];
   const shouldHideNav = hideNavPaths.includes(location.pathname);
+// Hide footer only for login
+const hideFooterPaths = ["/login"];
+const shouldHideFooter = hideFooterPaths.includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-all">
@@ -188,7 +192,7 @@ const App = () => {
 
       {/* Navbar visible for public + logged pages */}
       {!shouldHideNav && <Navbar role={role} loggedIn={loggedIn} />}
-     <main className="min-h-screen bg-cream">
+     <main>
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
@@ -247,7 +251,8 @@ const App = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
      </main>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
+
     </div>
   );
 };

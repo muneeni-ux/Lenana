@@ -3,6 +3,7 @@ import express from 'express'; // Crucial: Import Express
 import cors from 'cors';
 import authRouter from './routes/auth.js'; 
 import stockInRoutes from "./routes/stockInRoutes.js";
+import clientRoutes from "./routes/clientRoutes.js";
 
 // --- Configuration & Initialization ---
 const app = express(); // Crucial: Initialize the app object
@@ -27,6 +28,7 @@ app.use(cors(corsOptions));
 // --- API Routes ---
 app.use('/api/auth', authRouter); 
 app.use("/api/stock-in", stockInRoutes);
+app.use("/api/clients", clientRoutes);
 
 
 

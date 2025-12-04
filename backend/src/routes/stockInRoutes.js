@@ -28,7 +28,6 @@ router.get(
 );
 
 // routes/stockInRoutes.js
-// routes/stockInRoutes.js
 router.get(
   "/mine",
   authenticate,             // ✅ ensures req.user exists

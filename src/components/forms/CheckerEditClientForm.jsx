@@ -15,7 +15,7 @@ function CheckerEditClientForm({ client, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-auto">
-      <div className="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-xl shadow-lg p-6 space-y-6 animate-fade-in">
+      <div className="bg-white dark:bg-gray-800 w-full max-w-2xl rounded-xl shadow-lg p-6 space-y-5 max-h-[90vh] overflow-auto">
 
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-3 dark:border-gray-700">

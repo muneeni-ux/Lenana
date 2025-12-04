@@ -151,7 +151,7 @@ function ManageInvoices() {
   };
 
   return (
-    <div className="pt-24 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all min-h-screen">
+    <div className="pt-16 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all min-h-screen">
       <h1 className="text-3xl font-bold mb-6">Invoices</h1>
 
       {/* Tabs */}

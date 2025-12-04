@@ -108,7 +108,7 @@ export default function CheckerDashboard() {
   const goToInventory = () => navigate("/inventory");
 
   return (
-    <div className="pt-24 px-6 pb-12 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
+    <div className="pt-16 px-6 pb-12 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
         <div>

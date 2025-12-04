@@ -83,7 +83,7 @@ function MakerDashboard() {
   };
 
   return (
-    <div className="pt-24 px-6 pb-20 text-gray-800 dark:text-gray-200 transition-all">
+    <div className="pt-16 pb-20 px-6 text-gray-800 dark:text-gray-200 transition-all">
 
       {/* ------------------------------ Header ------------------------------ */}
       <div className="mb-10">

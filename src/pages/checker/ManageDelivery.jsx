@@ -236,7 +236,7 @@ export default function ManageDelivery() {
   };
 
   return (
-    <div className="pt-24 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
+    <div className="pt-16 px-6 pb-10 text-gray-800 dark:text-gray-100 transition-all max-w-7xl mx-auto">
 
       {/* header */}
       <div className="flex items-start justify-between mb-6">
