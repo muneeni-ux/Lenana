@@ -4,6 +4,8 @@ import cors from 'cors';
 import authRouter from './routes/auth.js'; 
 import stockInRoutes from "./routes/stockInRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
+import inventoryRoutes from "./routes/inventoryRoutes.js";
+import productRoutes from "./routes/productsRoutes.js";
 
 // --- Configuration & Initialization ---
 const app = express(); // Crucial: Initialize the app object
@@ -29,7 +31,10 @@ app.use(cors(corsOptions));
 app.use('/api/auth', authRouter); 
 app.use("/api/stock-in", stockInRoutes);
 app.use("/api/clients", clientRoutes);
-
+app.use("/api/inventory",inventoryRoutes); 
+app.use("/api/products",productRoutes);
+// app.use("/api/orders",orderRoutes);
+// app.use("/api/production",productionRoutes);
 
 
 // --- Start Server ---
