@@ -10,16 +10,6 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-/**
- * ManageProduction (Checker)
- * - Reads/writes productionBatches from localStorage
- * - Reads/writes inventory from localStorage (to record QC outcomes)
- * - Stores stock movement logs in localStorage.stockMovements
- * - QC Modal allows entry of defectiveQty and QC notes.
- * - Approve is only allowed when batch.status === "COMPLETED"
- *
- * SPEC_PDF_URL uses the uploaded file path so your infra can serve it.
- */
 const SPEC_PDF_URL = "/mnt/data/Lenana Drops System.pdf";
 
 function useLocalStorage(key, fallback) {

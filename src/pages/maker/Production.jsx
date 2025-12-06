@@ -1,23 +1,9 @@
 import React, { useState } from "react";
 import { PlusCircle, Clock, CheckCircle, Package } from "lucide-react";
 import BatchForm from "../../components/forms/BatchForm";
-// {
-//   /* Product batches requested seen here (Begun Production button to start and set start time and end time when done)
-//       Track Progress: Update start/end times on the batches,
-//       Products inputted here after production(automatic if possible) status: Completed, defective, wasted (frontend to include product dropdown with prices) 
-//       Inventory view to see added products and their details and status
-//       */
-// }
+
 function Production() {
   const [batches, setBatches] = useState([
-    {
-      id: "BATCH-001",
-      product: "20L Bottle",
-      qty: 50,
-      status: "Planned",
-      start: null,
-      end: null,
-    },
     {
       id: "BATCH-002",
       product: "10L Bottle",
@@ -69,7 +55,7 @@ function Production() {
       {
         id: "BATCH-" + Math.floor(Math.random() * 900 + 100),
         ...batch,
-        status: "Plannedy",
+        status: "Planned",
         start: null,
         end: null,
       },
@@ -79,7 +65,7 @@ function Production() {
 
   const getStatusBadge = (status) => {
     const map = {
-      Plannedy: "bg-yellow-200 text-yellow-800",
+      Planned: "bg-yellow-200 text-yellow-800",
       "In Progress": "bg-blue-200 text-blue-800",
       Completed: "bg-green-200 text-green-800",
     };
@@ -133,7 +119,7 @@ function Production() {
 
             {/* Action Buttons */}
             <div className="mt-4 flex gap-2 flex-wrap">
-              {batch.status === "Plannedy" && (
+              {batch.status === "Planned" && (
                 <button
                   onClick={() => startBatch(batch.id)}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"

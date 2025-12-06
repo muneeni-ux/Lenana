@@ -15,7 +15,7 @@ const router = express.Router();
 router.get("/", authenticate, getProducts);
 
 // Owner + Maker can create
-router.post("/", authenticate, requireRole("OWNER", "MAKER"), createProduct);
+router.post("/", authenticate, requireRole("OWNER", "CHECKER"), createProduct);
 
 // Owner + Checker + Maker can update
 router.put("/:id", authenticate, requireRole("OWNER", "CHECKER", "MAKER"), updateProduct);

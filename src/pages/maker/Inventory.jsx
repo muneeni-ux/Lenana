@@ -530,7 +530,9 @@ export default function Inventory({ user }) {
 
   const fetchStockMovements = async () => {
     try {
-      const res = await axios.get(`${SERVER_URL}/api/inventory/movements`,);
+      const res = await axios.get(`${SERVER_URL}/api/inventory/movements`,{
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") }
+      });
       setStockMovements(res.data);
     } catch (err) {
       console.error(err);

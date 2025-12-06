@@ -246,6 +246,7 @@
 //     res.status(500).json({ error: err.message });
 //   }
 // };
+
 import { db } from "../db.js";
 import { v4 as uuid } from "uuid";
 
@@ -275,53 +276,100 @@ export const listInventory = async (req, res) => {
 /**
  * Create inventory item (OWNER/MAKER can create)
  */
+// export const createInventory = async (req, res) => {
+//   console.log("📥 createInventory: Request received. Body:", req.body); // Debug Log
+//   try {
+//     const id = uuid();
+//     const createdBy = req.user?.id || null;
+//     console.log(`🛠️ createInventory: Generated ID: ${id}, Created By: ${createdBy}`); // Debug Log
+
+//     const {
+//       productId,
+//       warehouseLocation = "Factory",
+//       quantityAvailable = 0,
+//       quantityReserved = 0,
+//       quantityDamaged = 0,
+//       daysSupplyOnHand = null,
+//       lastStockCountDate = null,
+//     } = req.body;
+
+//     const values = [
+//         id,
+//         productId,
+//         warehouseLocation,
+//         Number(quantityAvailable),
+//         Number(quantityReserved),
+//         Number(quantityDamaged),
+//         daysSupplyOnHand,
+//         lastStockCountDate,
+//         createdBy,
+//         createdBy,
+//       ];
+//     console.log("❓ createInventory: Query values (10):", values); // Debug Log
+
+//     const [result] = await db.query(
+//       `INSERT INTO inventory
+//        (id, productId, warehouseLocation, quantityAvailable, quantityReserved, quantityDamaged, daysSupplyOnHand, lastStockCountDate, createdBy, updatedBy)
+//        VALUES (?,?,?,?,?,?,?,?,?,?)`,
+//       values
+//     );
+//     console.log("✔️ createInventory: SQL Result:", result); // Debug Log
+
+//     console.log("Created inventory:", id, "by", createdBy);
+//     res.json({ message: "Inventory created", id });
+//   } catch (err) {
+//     console.error("❌ ERROR createInventory:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+/**
+ * Create inventory item (OWNER/MAKER can create)
+ */
 export const createInventory = async (req, res) => {
-  console.log("📥 createInventory: Request received. Body:", req.body); // Debug Log
-  try {
-    const id = uuid();
-    const createdBy = req.user?.id || null;
-    console.log(`🛠️ createInventory: Generated ID: ${id}, Created By: ${createdBy}`); // Debug Log
+    console.log("📥 createInventory: Request received. Body:", req.body); // Debug Log
+    try {
+        const id = uuid();
+        const createdBy = req.user?.id || null;
+        console.log(`🛠️ createInventory: Generated ID: ${id}, Created By: ${createdBy}`); // Debug Log
 
-    const {
-      productId,
-      warehouseLocation = "Factory",
-      quantityAvailable = 0,
-      quantityReserved = 0,
-      quantityDamaged = 0,
-      daysSupplyOnHand = null,
-      lastStockCountDate = null,
-    } = req.body;
+        const {
+            productId,
+            warehouseLocation = "Factory",
+            quantityAvailable = 0,
+            quantityReserved = 0,
+            quantityDamaged = 0,
+            daysSupplyOnHand = null,
+            lastStockCountDate = null,
+        } = req.body;
 
-    const values = [
-        id,
-        productId,
-        warehouseLocation,
-        Number(quantityAvailable),
-        Number(quantityReserved),
-        Number(quantityDamaged),
-        daysSupplyOnHand,
-        lastStockCountDate,
-        createdBy,
-        createdBy,
-      ];
-    console.log("❓ createInventory: Query values (10):", values); // Debug Log
+        const values = [
+            id,
+            productId,
+            warehouseLocation,
+            Number(quantityAvailable),
+            Number(quantityReserved),
+            Number(quantityDamaged),
+            daysSupplyOnHand,
+            lastStockCountDate,
+            createdBy,
+            createdBy,
+        ];
+        console.log("❓ createInventory: Query values (10):", values); // Debug Log
 
-    const [result] = await db.query(
-      `INSERT INTO inventory
-       (id, productId, warehouseLocation, quantityAvailable, quantityReserved, quantityDamaged, daysSupplyOnHand, lastStockCountDate, createdBy, updatedBy)
-       VALUES (?,?,?,?,?,?,?,?,?,?)`,
-      values
-    );
-    console.log("✔️ createInventory: SQL Result:", result); // Debug Log
+        // --- CORRECTED QUERY STRING ---
+        const [result] = await db.query(
+            `INSERT INTO inventory (id, productId, warehouseLocation, quantityAvailable, quantityReserved, quantityDamaged, daysSupplyOnHand, lastStockCountDate, createdBy, updatedBy) VALUES (?,?,?,?,?,?,?,?,?,?)`,
+            values
+        );
+        console.log("✔️ createInventory: SQL Result:", result); // Debug Log
 
-    console.log("Created inventory:", id, "by", createdBy);
-    res.json({ message: "Inventory created", id });
-  } catch (err) {
-    console.error("❌ ERROR createInventory:", err);
-    res.status(500).json({ error: err.message });
-  }
+        console.log("Created inventory:", id, "by", createdBy);
+        res.json({ message: "Inventory created", id });
+    } catch (err) {
+        console.error("❌ ERROR createInventory:", err);
+        res.status(500).json({ error: err.message });
+    }
 };
-
 /**
  * Update inventory (owner/maker/checker depending on privilege)
  */

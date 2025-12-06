@@ -1,18 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { X, Plus, Minus, Trash } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-/**
- * OrderForm (centered modal)
- * Props:
- * - open (bool)
- * - onClose (fn)
- * - onSubmit (fn) receives full order object
- * - clients (array) [{id, businessName, ...}]
- * - products (array) [{id, name, unitPriceKsh, productionCostPerUnitKsh}]
- *
- * Produces order object matching your spec fields (but no approver info).
- */
-
 
 export default function OrderForm({ open, onClose, onSubmit, clients = [], products = [] }) {
   const [clientId, setClientId] = useState("");

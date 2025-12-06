@@ -22,7 +22,7 @@ router.get("/", authenticate, listInventory);
 router.post("/", authenticate, requireRole(["MAKER","OWNER"]), createInventory);
 
 // update (maker/checker/owner)
-router.put("/:id", authenticate, requireRole(["MAKER","CHECKER","OWNER"]), updateInventory);
+router.put("/:id", authenticate, requireRole(["CHECKER","OWNER"]), updateInventory);
 
 // soft-delete (owner only OR checker can mark inactive - adjust if needed)
 router.delete("/:id", authenticate, requireRole(["OWNER"]), deleteInventory);
