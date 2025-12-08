@@ -122,10 +122,17 @@ export const getBatchDetails = async (req, res) => {
  * Creates a new production batch (Status: PENDING).
  * Req.body: { productId: string, quantityPlanned: number }
  */
+/**
+ * POST /api/production/
+ * Creates a new production batch (Status: PENDING).
+ * Req.body: { productId: string, quantityPlanned: number }
+ */
 export const createBatch = async (req, res) => {
     const { productId, quantityPlanned } = req.body;
-    const createdBy = req.user.username; // Use username for tracking creator
-    const id = uuid(); // Internal unique ID
+    const createdBy = req.user.id; // Use username for tracking creator
+    
+    // The internal unique 'id' is now handled by the database (auto_increment).
+    // The user-facing ID is generated here:
     const batchId = `BATCH-${Math.floor(Math.random() * 90000) + 10000}`; // Simple generated user-facing ID
 
     console.log(`📥 createBatch: Creating new batch ${batchId} for Product ID: ${productId}`);
@@ -138,22 +145,27 @@ export const createBatch = async (req, res) => {
         const productName = await getProductName(productId);
         const productionDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
+        // ⭐ FIX APPLIED: 'id' column and its corresponding '?' value have been removed
+        // from the query, relying on MySQL's auto_increment.
         const [result] = await db.query(
             `INSERT INTO production_batches (
-                id, batchId, productId, productName, quantityPlanned, productionDate, status, createdBy
-            ) VALUES (?, ?, ?, ?, ?, ?, 'PENDING', ?)`,
-            [id, batchId, productId, productName, quantityPlanned, productionDate, createdBy]
+                batchId, productId, productName, quantityPlanned, productionDate, status, createdBy
+            ) VALUES (?, ?, ?, ?, ?, 'PENDING', ?)`,
+            [ batchId, productId, productName, quantityPlanned, productionDate, createdBy]
         );
 
         console.log("✔️ createBatch: SQL Result:", result);
+        
+        // Use result.insertId to get the auto-generated integer ID if needed, 
+        // otherwise, just return the batchId.
         res.status(201).json({ 
             message: `Batch ${batchId} created successfully.`, 
             batchId,
-            id 
+            id: result.insertId // Optional: Return the auto-generated integer ID
         });
     } catch (err) {
         console.error("❌ ERROR createBatch:", err);
-        // Handle unique constraint error on batchId if it's used as unique key, though UUIDs should prevent this
+        // Handle unique constraint error on batchId if it's used as unique key
         if (err.code === 'ER_DUP_ENTRY') { 
              return res.status(409).json({ error: "Duplicate batch ID detected. Try again." });
         }
@@ -286,6 +298,7 @@ export const qcApproveBatch = async (req, res) => {
     const { batchId } = req.params;
     const { defectiveQty, passedQty, qcNotes } = req.body;
     
+    // Use ID for foreign keys, Username for logging (where appropriate)
     const checkerId = req.user.id; 
     const checkerUsername = req.user.username;
     const qcDate = new Date().toISOString().slice(0, 19).replace('T', ' '); 
@@ -310,7 +323,7 @@ export const qcApproveBatch = async (req, res) => {
         }
         if (batch.status !== 'COMPLETED') {
             await connection.rollback();
-            return res.status(400).json({ message: "Batch must be in COMPLETED status to approve QC." });
+            return res.status(400).json({ message: `Batch is currently in ${batch.status} status. Only COMPLETED batches can be approved QC.` });
         }
 
         const qtyCompleted = Number(batch.quantityCompleted || 0);
@@ -336,11 +349,11 @@ export const qcApproveBatch = async (req, res) => {
             defectiveQty, passedQty, qcNotes, checkerUsername, qcDate, batchId
         ]);
 
-        // 4. Update Inventory (Upsert logic: INSERT OR UPDATE)
+        // --- Inventory Update ---
         const productId = batch.productId;
         const today = new Date().toISOString().split('T')[0];
         
-        // Use ON DUPLICATE KEY UPDATE to handle existing/new inventory records
+        // 4. Update Inventory (Upsert logic: INSERT OR UPDATE)
         const upsertInventoryQuery = `
             INSERT INTO inventory (id, productId, warehouseLocation, quantityAvailable, quantityDamaged, lastStockCountDate, createdBy, updatedBy)
             VALUES (?, ?, 'Factory', ?, ?, ?, ?, ?)
@@ -350,33 +363,55 @@ export const qcApproveBatch = async (req, res) => {
             lastStockCountDate = VALUES(lastStockCountDate),
             updatedBy = ?
         `;
-        // Note: For simplicity, assuming `productId` is unique/indexed on `inventory` table
-        // A unique UUID `id` is generated for the INSERT case.
         await connection.query(upsertInventoryQuery, [
-            uuid(), productId, passedQty, defectiveQty, today, checkerId, checkerId, checkerId
+            uuid(), productId, passedQty, defectiveQty, today, checkerId, checkerId, checkerId // Last checkerId is for updatedBy
         ]);
 
 
+        // 4.5. ⭐ CRITICAL FIX: Fetch the actual inventory.id after UPSERT
+        // This ID is the primary key needed for the stock_movements foreign key constraint.
+        const [inventoryRows] = await connection.query(
+            `SELECT id FROM inventory WHERE productId = ?`,
+            [productId]
+        );
+        
+        if (inventoryRows.length === 0) {
+            await connection.rollback();
+            // Should not happen after a successful upsert
+            return res.status(500).json({ message: "Inventory record not found after upsert. Transaction rolled back." });
+        }
+        
+        // Store the correct ID for the Foreign Key constraint
+        const correctInventoryId = inventoryRows[0].id; 
+        
+        // --- Stock Movements Log ---
         // 5. Log Stock Movements
         const movements = [];
+
         if (passedQty > 0) {
             movements.push([
-                uuid(), productId, passedQty, 
+                uuid(), 
+                correctInventoryId, // ⭐ FIXED: Use the inventory.id (UUID)
+                passedQty, 
                 `QC passed for batch ${batchId} - Added to Available Stock`, 
-                checkerUsername, qcDate
+                checkerId,
+                qcDate
             ]);
         }
         if (defectiveQty > 0) {
             movements.push([
-                uuid(), productId, defectiveQty, 
+                uuid(), 
+                correctInventoryId, // ⭐ FIXED: Use the inventory.id (UUID)
+                defectiveQty, 
                 `QC defective for batch ${batchId} - Added to Damaged Stock`,
-                checkerUsername, qcDate
+                checkerId,
+                qcDate
             ]);
         }
 
         if (movements.length > 0) {
             const insertMovementQuery = `
-                INSERT INTO stock_movements (id, inventoryId, delta, reason, byUser, date)
+                INSERT INTO stock_movements (id, inventoryId, delta, reason, byUser, createdAt)
                 VALUES ?
             `;
             await connection.query(insertMovementQuery, [movements]);
@@ -384,6 +419,7 @@ export const qcApproveBatch = async (req, res) => {
 
         // 6. Commit the transaction
         await connection.commit();
+        console.log(`✔️ qcApproveBatch: Batch ${batchId} approved and transaction committed.`);
         res.json({ message: `Batch ${batchId} approved and inventory updated successfully.`, batchId });
 
     } catch (err) {

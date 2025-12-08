@@ -147,13 +147,13 @@ const handlePClick = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-2 md:px-0 py-3">
         {/* LOGO */}
         <div
-          onClick={() => navigate("/")}
+          // onClick={() => navigate("/")}
           className="flex items-center gap-3 cursor-pointer"
         >
           {/* <Droplet size={22} className="text-white" /> */}
           <img
             src="./LenanaLogo3.jpg"
-            alt=""
+            alt="logo"
             className="h-12 w-12 rounded-full"
           />
           <div>

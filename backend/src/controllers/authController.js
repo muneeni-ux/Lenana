@@ -247,3 +247,19 @@ export const getAllUsers = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getDrivers = async (req, res) => {
+    try {
+        // Query the 'users' table, filtering for active drivers
+        const [drivers] = await db.query(
+            `SELECT id, CONCAT(firstName, ' ', lastName) AS name, phone AS phone_number 
+             FROM users 
+             WHERE role = 'DRIVER' AND isActive = 1 
+             ORDER BY firstName`
+        );
+        res.status(200).json(drivers);
+    } catch (err) {
+        console.error("❌ ERROR getDrivers:", err);
+        res.status(500).json({ error: "Failed to fetch drivers." });
+    }
+};

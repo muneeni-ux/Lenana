@@ -603,6 +603,13 @@ export default function Inventory({ user }) {
     }
   };
 
+  const formatDateTime = (d) => {
+  if (!d) return "---";
+  const dt = new Date(d);
+  if (isNaN(dt)) return String(d);
+  return dt.toLocaleString(); // Shows both date and time
+};
+
   const handleExport = () => {
     const csvData = filtered.map((i) => {
       const prod = products.find((p) => p.id === i.productId);
@@ -823,7 +830,7 @@ export default function Inventory({ user }) {
                   <td className="p-3 text-red-500">{item.quantityDamaged}</td>
                   <td className="p-3 font-bold">{total}</td>
                   <td className="p-3">{item.warehouseLocation}</td>
-                  <td className="p-3">{item.lastStockCountDate}</td>
+                  <td className="p-3">{formatDateTime(item.lastStockCountDate)}</td>
                   <td className="p-3 flex gap-2">
                     {(role === "OWNER" || role === "CHECKER") && (
                       <button

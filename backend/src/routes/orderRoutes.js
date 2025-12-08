@@ -2,6 +2,7 @@ import express from 'express';
 import { 
     // Existing Core Order Imports
     createOrder, 
+    updateOrder,
     approveOrder, 
     rejectOrder,
     getOrder,
@@ -11,7 +12,6 @@ import {
     completeProductionApproval,
     
     // NEW Delivery/Driver Imports
-    getDrivers,
     assignDriver,
     getDriverAssignments,
     completeDelivery
@@ -48,22 +48,28 @@ router.post('/', authenticate, requireRole(['MAKER', 'CHECKER']), createOrder);
 // Route: GET /api/orders
 router.get('/', authenticate, getOrders);
 
+
 // All: Get a single order's details
 // Route: GET /api/orders/:orderId
 router.get('/:orderId', authenticate, getOrder);
 
-
+router.patch('/:orderId', authenticate, requireRole(['MAKER', 'CHECKER', 'OWNER']), updateOrder);
 // =========================================================================
 // --- Checker / Approval Flow ---
 // =========================================================================
 
 // Checker: Approve the order (triggers stock reservation or production batch creation)
-// Route: POST /api/orders/:orderId/approve
-router.post('/:orderId/approve', authenticate, requireRole(['CHECKER']), approveOrder);
+// Driver Assignment
+// Route: PATCH /api/orders/:orderId/assign  <-- Changed to PATCH
+router.patch('/:orderId/assign', authenticate, requireRole(['CHECKER', 'OWNER']), assignDriver);
+
+// Checker: Approve the order
+// Route: PATCH /api/orders/:orderId/approve  <-- Changed to PATCH
+router.patch('/:orderId/approve', authenticate, requireRole(['CHECKER', 'OWNER']), approveOrder);
 
 // Checker: Reject the order
-// Route: POST /api/orders/:orderId/reject
-router.post('/:orderId/reject', authenticate, requireRole(['CHECKER']), rejectOrder);
+// Route: PATCH /api/orders/:orderId/reject  <-- Changed to PATCH
+router.patch('/:orderId/reject', authenticate, requireRole(['CHECKER', 'OWNER']), rejectOrder);
 
 
 // =========================================================================
@@ -78,14 +84,6 @@ router.post('/production/:batchId/approve', authenticate, requireRole(['CHECKER'
 // =========================================================================
 // --- Delivery / Driver Flow (NEW ROUTES) ---
 // =========================================================================
-
-// Checker/Owner: Fetches a list of active drivers for assignment dropdown.
-// Route: GET /api/orders/drivers
-router.get('/drivers', authenticate, requireRole(['CHECKER', 'OWNER']), getDrivers);
-
-// Checker/Owner: Assigns a driver to an APPROVED or READY_FOR_DELIVERY order.
-// Route: POST /api/orders/:orderId/assign
-router.post('/:orderId/assign', authenticate, requireRole(['CHECKER', 'OWNER']), assignDriver);
 
 // Driver: Fetches all orders assigned specifically to the authenticated driver.
 // Route: GET /api/orders/deliveries/mine

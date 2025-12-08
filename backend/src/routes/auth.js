@@ -7,6 +7,7 @@ import {
   updateProfile,
   changePassword,
   getAllUsers,
+  getDrivers,
   deleteUser,
 } from "../controllers/authController.js";
 
@@ -42,6 +43,8 @@ router.post("/create-user", authenticate, requireRole(["OWNER"]), createUser);
 
 // owner get all users
 router.get("/users", authenticate, requireRole(["OWNER"]), getAllUsers);
+// Route: GET /api/orders/drivers
+router.get('/users/drivers', authenticate, requireRole(['CHECKER', 'OWNER']), getDrivers);
 
 // owner delete user
 router.delete("/delete-user/:id", authenticate, requireRole(["OWNER"]), deleteUser);
